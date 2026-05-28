@@ -41,91 +41,252 @@
 
     <div class="text-page">
 
-        <h1>Matéria do rodrigo</h1>
+    <h1>📚 Matéria do Rodrigo</h1>
 
-        <p>
-            
-        </p>
+    <h2>🌐 Códigos HTTP</h2>
 
-        <p>
-            Códigos HTTP
-            Principais respostas: -200 OK -201 Created -400 Bad Request -401 Unauthorized -404 Not Found -500 Internal Server Error
-            Porta 443 HTTPS
-            Métodos HTTP
-            Método |Função GET |Consultar POST |Criar PUT |Atualizar DELETE |Excluir
-            O que é REST?
-            REST(Representational State Transfer ou tranferência de estado representacional) é um conjunto de regras e diretrizes arquiteturais usado na programação para que diferentes sistemas conversem entre si pela internet. Em vez de ser uma tecnologia, é um modelo de boas práticas que utiliza o protocolo padrão da web(HTTP).
-            REST; Regras/restrições REST Cliente servidor(client-server) Sem estado(stateless) Cacheable
-            Rest e HTTP
-            HTTP é o protocolo de transporte de dados usado na internet, enquanto resto é um estilo arquitetural de regras para criar serviços web, geralmente ultilizando o HTTP, HTTP faz a conexão, e Rest define o padrão de uso(como GET, POST, DELETE) para transferencia de dados. Rest é como organizar e HTTP é como transportar.
-            O que são APIs?
-            (Application Programming Interface, ou interface de programação de aplicações) É um conjunto de regras, protocolos e ferramentas que permite que diferentes softwares e sistemas se comuniquem entre si.
-            Como funciona?
-            Ela funciona recebendo uma requisição (pedido) de um sistema (cliente), processando-a acessando um banco de daos ou servidor, e retornando uma resposta.
-            Onde usamos api? -Login com google -Aplicativos bancários -Mapas e geolocalização -Previsão do tempo -Redes sociais
-            Tipos de API: -Públicas -Privadas -Parceiras -Internas
-            Toda API descente tem um WAF tomando conta. WAF serve para aplicação web e API.
-            WAF(Web Application Firewall) é uma solução de segurança que protege aplicações web(sites/APIs) filtrando e monitorando o tráfego HTTP/HTTPS, agindo como um proxy reverso entre a internet e o servidor. Ele bloqueia ameaças comuns, como injeção de SQL, Cross-Site Scripting(XSS) e bots, diferenciando-se de firewalls de rede por focar na camada de aplicação.
-            Quanto a arquitetura:
-            REST SOAP gRPC graphQL
-            JWT(Json Web Token) O JSON Web Token é um padrão da internet para a criação de dados com assinatura opcional e /ou criptogradia cujo payload contém o JSON que afirma algum número de declarações. Os tokens são assinados usando um segredo privado ou uma chave pública/privada.
-            O que são métodos ágeis
-            Conjunto de práticas para desenvolvimento rápido e interativo.
-            Valoriza: -Colaboração com o cliente -Resposta rápida a mudanças -Software funcionando mais do que documentação extensa -Exemplos: Scrum,XP,kanban.
-            Scrum
-            Como funciona na prática:
-            Product Owner define o backlog:
-            "Cadastrar usuário","validar senha","Enviar e-mail de boas-vindas"Sprint Planning: a equipe escolhe o que vai fazer em 2 semanas.Ex: nesse Sprint,farão o cadastro e calidação de senha.
-            Daily Scrum: Reuniões diárias de 15 min para sincronizar o progresso.
-            Sprint review: Apresentação da funcionalidade funcionando ao final da sprint.
-            Sprint Retrospective: Equipe analisa o que funcionou e o que pode melhorar.
-            Resumo: Ciclos curtos e planejados (sprints), com entregas frequentes e colaboração constante.
-            XP (Extremme Progamming)
-            Como funciona na prática:
-            -TDD(test-driven Development): Antes de implementar o cadastro, escrevem um teste:"Usuário deve ter e-mail válido". Depois escrevem o código para passar no teste.
-            -Pair Programing(Programação em par): Dois desenvolvedores sentam juntos, um escreve código, o outro revisa em tempo real.
-            -Refatoração constante: Melhoram o código sempre que possível, sem mudar o comportamento.
-            -Integração contínua: Código novo é integrado e testado automaticamente várias vezes ao dia.
-            -Feedback frequente com o cliente: Mostram pequenas partes funcionando a cada poucos dias.
-            Kanvan
-            Como criar um quadro Kanban com colunas: -Criam um quadro kanban com colunas: A fazer -> Em progresso -> Concluído
-            -As tarefas são representadas por cartões(ex:"Corrigir bug no cadastro","Melhorar layout").
-            -Limitam o número de tarefas por colina : max 2 tarefas "em progresso".
-            -A equipe puxa as tarefas conforme termina as anteriores (modelo puxado).
-            -O foco é no fluxo continuo em vez de ciclos fixos.
-            Resumo: Visual, flexível, ideal para suporte e manutenção contínua de software.
-            Fundamentos da Orientação a objetos
-            -Abstração -Encapsulamento -Herança -Polimorfismo -Modelagem baseada em ojetos do mundo real
-            Sinergia entre OO e Métodos ágeis -Orientação a Objetos facilita refatorações frequentes -Testabilidade: objetos bem definidos facilitam testes automatizados -Modularidade: ajuda em entregas incrementais -Reutilização de código: ideal para desenvolvimento iterativo
-            Benefícios da Combinação -Maior flecibilidade para mudanças -Redução de retrabalho -Facilidade de testes automatizados -Código mais limpo e reutilizável -Melhor comunicação entre equipes
-            Extreme Programming (XP) e OO
-            -XP é altamente alinhado com OO Programação em par TDD (Test-driven Development) Refatoração contínua -OO permite criar testes unitários eficazes e reutilizaveis.
-            Práticas ágeis com OO
-            -Design Simples: foco no necessário, OO ajuda na organização -Responsabilidade única (SRP): cada classe -Código Limpo: nomes claros, baixa acoplamento -Padrões de Projeto(design patterns) auxiliam na manutenção
-            Exemplo prático
-            -Aplicação simples de cadastro de usuários
-            O princípio F.I.R.S.T.
-            Fast- Os testes devem executar rapidamente; Independent - Os testes unitarios devem ser indepentes um dos outros; Repeatable - Os testes unitários devem ser repetíveis; Self-validaling- Os testes unitários devem se auto validarem; Thorough & timely - Os testes unitários devem cobrir casos extremos.
-            Como faremos estes testes?
-            Utilizaremos o JUnit: que é um dos frameworks mais utilizados para testes em java. Ele fornece:
-            Anotações(@test)
-            Métodos de validação(assertEquals)
-            Execução automática dos testes
-            Relatório de sucesso/falha
-            Principais Assertions
-            assertEquals => assertEquals(10,valor);
-            Exemplo 1:
-            //Metodo Simples em JAVA public int somar(int a,int b){ return a+b; }
-            //teste @test public void testeSomar(){ assetEquals(5, calculadora.somar(2,3)); }
-            Exemplo 2:
-            public class Calculadora( public int dividir(int a, int b){ return a/b; } }
-            import org.junit.Test; import static org.junit.Assert;
-            public class CalculadoraTest{
-            @Testpublic void testeDividir(){ Calculadora calc=new Calculadora(); int resultado = calc.dividir(10,2); asserEquals(5,resultado);}
-            }
-        </p>
+    <ul>
+        <li><strong>200 OK</strong> → Requisição bem-sucedida</li>
+        <li><strong>201 Created</strong> → Novo recurso criado</li>
+        <li><strong>400 Bad Request</strong> → Requisição inválida</li>
+        <li><strong>401 Unauthorized</strong> → Usuário não autenticado</li>
+        <li><strong>404 Not Found</strong> → Recurso não encontrado</li>
+        <li><strong>500 Internal Server Error</strong> → Erro interno do servidor</li>
+    </ul>
 
-    </div>
+    <h2>🔒 HTTPS</h2>
+
+    <p>
+        A porta padrão do HTTPS é <strong>443</strong>.
+    </p>
+
+    <h2>📡 Métodos HTTP</h2>
+
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Função</th>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>Consultar</td>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>Criar</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>Atualizar</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>Excluir</td>
+        </tr>
+    </table>
+
+    <h2>⚙️ O que é REST?</h2>
+
+    <p>
+        REST (Representational State Transfer) é um conjunto de regras e diretrizes arquiteturais
+        usado para que diferentes sistemas se comuniquem pela internet utilizando HTTP.
+    </p>
+
+    <h3>Regras do REST</h3>
+
+    <ul>
+        <li>Client-Server</li>
+        <li>Stateless (Sem estado)</li>
+        <li>Cacheable</li>
+    </ul>
+
+    <h2>🔄 REST x HTTP</h2>
+
+    <p>
+        HTTP é o protocolo responsável pelo transporte dos dados.
+        REST define o padrão de organização desse transporte.
+    </p>
+
+    <p>
+        <strong>HTTP transporta</strong> e <strong>REST organiza</strong>.
+    </p>
+
+    <h2>🧩 O que são APIs?</h2>
+
+    <p>
+        APIs (Application Programming Interface) são conjuntos de regras que permitem
+        que diferentes sistemas conversem entre si.
+    </p>
+
+    <h3>Como funciona?</h3>
+
+    <p>
+        O cliente envia uma requisição → o servidor processa → uma resposta é retornada.
+    </p>
+
+    <h3>Onde usamos APIs?</h3>
+
+    <ul>
+        <li>Login com Google</li>
+        <li>Aplicativos bancários</li>
+        <li>Mapas e geolocalização</li>
+        <li>Previsão do tempo</li>
+        <li>Redes sociais</li>
+    </ul>
+
+    <h3>Tipos de API</h3>
+
+    <ul>
+        <li>Públicas</li>
+        <li>Privadas</li>
+        <li>Parceiras</li>
+        <li>Internas</li>
+    </ul>
+
+    <h2>🛡️ WAF</h2>
+
+    <p>
+        WAF (Web Application Firewall) protege aplicações web e APIs.
+    </p>
+
+    <p>
+        Ele monitora e filtra tráfego HTTP/HTTPS, bloqueando ameaças como:
+    </p>
+
+    <ul>
+        <li>SQL Injection</li>
+        <li>XSS (Cross-Site Scripting)</li>
+        <li>Bots maliciosos</li>
+    </ul>
+
+    <h2>🏗️ Arquiteturas de API</h2>
+
+    <ul>
+        <li>REST</li>
+        <li>SOAP</li>
+        <li>gRPC</li>
+        <li>GraphQL</li>
+    </ul>
+
+    <h2>🔑 JWT (JSON Web Token)</h2>
+
+    <p>
+        JWT é um padrão para criação de tokens com assinatura digital.
+    </p>
+
+    <p>
+        O payload contém informações (claims) sobre o usuário ou sistema.
+    </p>
+
+    <h2>🚀 Métodos Ágeis</h2>
+
+    <p>
+        Conjunto de práticas para desenvolvimento rápido e iterativo.
+    </p>
+
+    <h3>Valores</h3>
+
+    <ul>
+        <li>Colaboração com o cliente</li>
+        <li>Resposta rápida a mudanças</li>
+        <li>Software funcionando acima de documentação extensa</li>
+    </ul>
+
+    <h3>Exemplos</h3>
+
+    <ul>
+        <li>Scrum</li>
+        <li>XP</li>
+        <li>Kanban</li>
+    </ul>
+
+    <h2>📋 Scrum</h2>
+
+    <ul>
+        <li><strong>Product Owner</strong> → Define o backlog</li>
+        <li><strong>Sprint Planning</strong> → Planejamento da Sprint</li>
+        <li><strong>Daily Scrum</strong> → Reunião diária de 15 minutos</li>
+        <li><strong>Sprint Review</strong> → Demonstração das funcionalidades</li>
+        <li><strong>Sprint Retrospective</strong> → Melhoria contínua</li>
+    </ul>
+
+    <h2>💻 XP (Extreme Programming)</h2>
+
+    <ul>
+        <li>TDD (Test-Driven Development)</li>
+        <li>Pair Programming</li>
+        <li>Refatoração constante</li>
+        <li>Integração contínua</li>
+        <li>Feedback frequente</li>
+    </ul>
+
+    <h2>📌 Kanban</h2>
+
+    <ul>
+        <li>A Fazer</li>
+        <li>Em Progresso</li>
+        <li>Concluído</li>
+    </ul>
+
+    <p>
+        O Kanban utiliza modelo puxado e limites de WIP.
+    </p>
+
+    <h2>🧠 Orientação a Objetos</h2>
+
+    <ul>
+        <li>Abstração</li>
+        <li>Encapsulamento</li>
+        <li>Herança</li>
+        <li>Polimorfismo</li>
+    </ul>
+
+    <h2>🤝 OO + Métodos Ágeis</h2>
+
+    <ul>
+        <li>Facilita refatoração</li>
+        <li>Melhora testabilidade</li>
+        <li>Permite modularidade</li>
+        <li>Reutilização de código</li>
+    </ul>
+
+    <h2>🧪 Princípio F.I.R.S.T.</h2>
+
+    <ul>
+        <li><strong>Fast</strong> → Testes rápidos</li>
+        <li><strong>Independent</strong> → Testes independentes</li>
+        <li><strong>Repeatable</strong> → Resultados repetíveis</li>
+        <li><strong>Self-validating</strong> → Auto validação</li>
+        <li><strong>Thorough</strong> → Cobrir casos extremos</li>
+    </ul>
+
+    <h2>☕ JUnit</h2>
+
+    <p>
+        Framework Java utilizado para testes unitários.
+    </p>
+
+    <h3>Recursos</h3>
+
+    <ul>
+        <li>@Test</li>
+        <li>Assertions</li>
+        <li>Execução automática</li>
+        <li>Relatórios de sucesso/falha</li>
+    </ul>
+
+    <h3>Principais Assertions</h3>
+
+    <ul>
+        <li>assertEquals</li>
+        <li>assertNotNull</li>
+    </ul>
+
+</div>
 
 </div>
 
