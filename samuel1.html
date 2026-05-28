@@ -1,0 +1,516 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Questionários - Compiladores</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📘 Questionários
+    </div>
+
+    <h2>Provas</h2>
+
+    <div class="menu">
+        <a href="#">Prova 28/05 - Rodrigo</a>
+        <a href="#">Prova 28/05 - Samuel</a>
+        <a href="#">Prova 01/06 - Eduardo</a>
+        <a href="#">Prova 02/06 - Samuel</a>
+        <a href="#">03/06 - Regina</a>
+    </div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="header">
+        <h1>Compiladores — Exercícios</h1>
+        <p>
+            Clique em uma alternativa para responder. 
+            Ao errar, a resposta correta será destacada em verde.
+        </p>
+    </div>
+
+    <!-- QUESTÃO 1 -->
+
+    <div class="question-card">
+
+        <div class="question-title">
+            Questão 1
+        </div>
+
+        <div class="question-text">
+            Considerando o papel da tabela de símbolos na análise semântica,
+            qual é a causa mais provável do erro emitido pelo compilador?
+        </div>
+
+        <div class="answers">
+
+            <div class="answer" data-correct="false">
+                A) A variável a foi declarada como inteiro, mas a expressão b + 10 resulta em um valor real.
+            </div>
+
+            <div class="answer" data-correct="true">
+                B) A variável b não foi declarada no escopo atual.
+            </div>
+
+            <div class="answer" data-correct="false">
+                C) A variável a está sendo usada antes de ser inicializada.
+            </div>
+
+            <div class="answer" data-correct="false">
+                D) A expressão contém operador inválido.
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- QUESTÃO 2 -->
+
+    <div class="question-card">
+
+        <div class="question-title">
+            Questão 2
+        </div>
+
+        <div class="question-text">
+            Como a ordem das operações foi garantida na geração do código?
+        </div>
+
+        <div class="answers">
+
+            <div class="answer" data-correct="true">
+                A) A gramática garante que a multiplicação tenha precedência sobre a adição.
+            </div>
+
+            <div class="answer" data-correct="false">
+                B) O código foi gerado apenas da esquerda para a direita.
+            </div>
+
+            <div class="answer" data-correct="false">
+                C) A adição é avaliada antes da multiplicação.
+            </div>
+
+            <div class="answer" data-correct="false">
+                D) Multiplicação possui menor precedência.
+            </div>
+
+        </div>
+
+    </div>
+```html
+<!-- QUESTÃO 3 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 3
+    </div>
+
+    <div class="question-text">
+        Considerando o funcionamento de uma tabela de símbolos com escopo aninhado,
+        qual será o valor impresso na primeira chamada print(x) dentro do bloco if?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) 10, porque a variável x do escopo externo é a única visível.
+        </div>
+
+        <div class="answer" data-correct="true">
+            B) 20, porque a declaração mais interna está no escopo corrente.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Um erro, porque a variável x foi redeclarada no mesmo escopo.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) 10, porque a variável x interna ainda não foi inserida na tabela.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 4 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 4
+    </div>
+
+    <div class="question-text">
+        Considerando a geração de código de três endereços,
+        qual alternativa representa corretamente a condição
+        a > 10 && b < 20?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="true">
+            A) Implementa corretamente o curto-circuito do operador AND.
+        </div>
+
+        <div class="answer" data-correct="false">
+            B) Executa o bloco mesmo sem validar ambas as condições.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Usa expressão booleana inválida em TAC.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Não trata corretamente o caso falso da primeira condição.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 5 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 5
+    </div>
+
+    <div class="question-text">
+        Qual técnica de otimização é mais adequada
+        para melhorar o desempenho do trecho apresentado?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="true">
+            A) Propagação de constantes e eliminação de código morto.
+        </div>
+
+        <div class="answer" data-correct="false">
+            B) Redução de força usando deslocamento de bits.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Desenrolamento de laços.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Reordenação de instruções.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 6 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 6
+    </div>
+
+    <div class="question-text">
+        Qual característica é mais crítica para garantir
+        segurança da concorrência em FlowLang?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) Suporte a herança múltipla.
+        </div>
+
+        <div class="answer" data-correct="true">
+            B) Imutabilidade por padrão das variáveis compartilhadas.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Tipagem dinâmica.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Operadores de precisão arbitrária.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 7 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 7
+    </div>
+
+    <div class="question-text">
+        Sobre tabela de símbolos e análise semântica,
+        quais afirmações estão corretas?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) I apenas.
+        </div>
+
+        <div class="answer" data-correct="false">
+            B) II apenas.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) I e III apenas.
+        </div>
+
+        <div class="answer" data-correct="true">
+            D) II e III apenas.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 8 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 8
+    </div>
+
+    <div class="question-text">
+        Em qual situação a tradução dirigida pela sintaxe é aplicada?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="true">
+            A) Apenas na situação 1.
+        </div>
+
+        <div class="answer" data-correct="false">
+            B) Apenas na situação 2.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Apenas na situação 3.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Nas situações 1 e 2.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 9 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 9
+    </div>
+
+    <div class="question-text">
+        Qual estratégia é mais adequada para tratar shadowing
+        em uma tabela de símbolos?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) Sobrescrever variáveis antigas.
+        </div>
+
+        <div class="answer" data-correct="true">
+            B) Utilizar pilha de tabelas de símbolos.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Renomear todas variáveis automaticamente.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Proibir nomes repetidos.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 10 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 10
+    </div>
+
+    <div class="question-text">
+        Sobre código de três endereços, quais afirmações estão corretas?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) I e II apenas.
+        </div>
+
+        <div class="answer" data-correct="true">
+            B) I e III apenas.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) II e III apenas.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) I, II e III.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 11 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 11
+    </div>
+
+    <div class="question-text">
+        Manter a variável soma em registrador durante o loop
+        é um exemplo de qual otimização?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) Eliminação de subexpressões comuns.
+        </div>
+
+        <div class="answer" data-correct="false">
+            B) Propagação de constantes.
+        </div>
+
+        <div class="answer" data-correct="true">
+            C) Alocação de registradores.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Loop-invariant code motion.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUESTÃO 12 -->
+
+<div class="question-card">
+
+    <div class="question-title">
+        Questão 12
+    </div>
+
+    <div class="question-text">
+        Qual atividade é essencial para garantir
+        uma implementação correta da linguagem?
+    </div>
+
+    <div class="answers">
+
+        <div class="answer" data-correct="false">
+            A) Definir apenas a sintaxe concreta.
+        </div>
+
+        <div class="answer" data-correct="true">
+            B) Especificar formalmente sintaxe e semântica.
+        </div>
+
+        <div class="answer" data-correct="false">
+            C) Criar um interpretador antes da especificação.
+        </div>
+
+        <div class="answer" data-correct="false">
+            D) Usar apenas exemplos de código.
+        </div>
+
+    </div>
+
+</div>
+```
+
+
+</div>
+
+<script>
+
+const allAnswers = document.querySelectorAll(".answer");
+
+allAnswers.forEach(answer => {
+
+    answer.addEventListener("click", () => {
+
+        const answersContainer = answer.parentElement;
+
+        // impedir múltiplos cliques
+        if(answersContainer.classList.contains("answered")){
+            return;
+        }
+
+        answersContainer.classList.add("answered");
+
+        const isCorrect = answer.dataset.correct === "true";
+
+        if(isCorrect){
+
+            answer.classList.add("correct");
+
+        }else{
+
+            answer.classList.add("wrong");
+
+            const correctAnswer =
+                answersContainer.querySelector('[data-correct="true"]');
+
+            correctAnswer.classList.add("correct");
+        }
+
+        // desabilitar todas
+        const all = answersContainer.querySelectorAll(".answer");
+
+        all.forEach(item => {
+            item.classList.add("disabled");
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
+```
