@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Texto</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📘 Estudos
+    </div>
+
+    <h2>Provas</h2>
+
+    <div class="menu">
+        <a href="index.html">Pagina inicial</a>
+        <a href="rodrigo.html">Prova 28/05 - Rodrigo</a>
+        <a href="samuel1.html">Prova 28/05 - Samuel</a>
+        <a href="eduardo.html">Prova 01/06 - Eduardo</a>
+        <a href="samuel2.html">Prova 02/06 - Samuel</a>
+        <a href="regina.html">Prova 03/06 - Regina</a>
+        <a href="materiadorodrigo"> Materia do rodrigo </a>
+    </div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="text-page">
+
+        <h1>Matéria do rodrigo</h1>
+
+        <p>
+            
+        </p>
+
+        <p>
+            Códigos HTTP
+            Principais respostas: -200 OK -201 Created -400 Bad Request -401 Unauthorized -404 Not Found -500 Internal Server Error
+            Porta 443 HTTPS
+            Métodos HTTP
+            Método |Função GET |Consultar POST |Criar PUT |Atualizar DELETE |Excluir
+            O que é REST?
+            REST(Representational State Transfer ou tranferência de estado representacional) é um conjunto de regras e diretrizes arquiteturais usado na programação para que diferentes sistemas conversem entre si pela internet. Em vez de ser uma tecnologia, é um modelo de boas práticas que utiliza o protocolo padrão da web(HTTP).
+            REST; Regras/restrições REST Cliente servidor(client-server) Sem estado(stateless) Cacheable
+            Rest e HTTP
+            HTTP é o protocolo de transporte de dados usado na internet, enquanto resto é um estilo arquitetural de regras para criar serviços web, geralmente ultilizando o HTTP, HTTP faz a conexão, e Rest define o padrão de uso(como GET, POST, DELETE) para transferencia de dados. Rest é como organizar e HTTP é como transportar.
+            O que são APIs?
+            (Application Programming Interface, ou interface de programação de aplicações) É um conjunto de regras, protocolos e ferramentas que permite que diferentes softwares e sistemas se comuniquem entre si.
+            Como funciona?
+            Ela funciona recebendo uma requisição (pedido) de um sistema (cliente), processando-a acessando um banco de daos ou servidor, e retornando uma resposta.
+            Onde usamos api? -Login com google -Aplicativos bancários -Mapas e geolocalização -Previsão do tempo -Redes sociais
+            Tipos de API: -Públicas -Privadas -Parceiras -Internas
+            Toda API descente tem um WAF tomando conta. WAF serve para aplicação web e API.
+            WAF(Web Application Firewall) é uma solução de segurança que protege aplicações web(sites/APIs) filtrando e monitorando o tráfego HTTP/HTTPS, agindo como um proxy reverso entre a internet e o servidor. Ele bloqueia ameaças comuns, como injeção de SQL, Cross-Site Scripting(XSS) e bots, diferenciando-se de firewalls de rede por focar na camada de aplicação.
+            Quanto a arquitetura:
+            REST SOAP gRPC graphQL
+            JWT(Json Web Token) O JSON Web Token é um padrão da internet para a criação de dados com assinatura opcional e /ou criptogradia cujo payload contém o JSON que afirma algum número de declarações. Os tokens são assinados usando um segredo privado ou uma chave pública/privada.
+            O que são métodos ágeis
+            Conjunto de práticas para desenvolvimento rápido e interativo.
+            Valoriza: -Colaboração com o cliente -Resposta rápida a mudanças -Software funcionando mais do que documentação extensa -Exemplos: Scrum,XP,kanban.
+            Scrum
+            Como funciona na prática:
+            Product Owner define o backlog:
+            "Cadastrar usuário","validar senha","Enviar e-mail de boas-vindas"Sprint Planning: a equipe escolhe o que vai fazer em 2 semanas.Ex: nesse Sprint,farão o cadastro e calidação de senha.
+            Daily Scrum: Reuniões diárias de 15 min para sincronizar o progresso.
+            Sprint review: Apresentação da funcionalidade funcionando ao final da sprint.
+            Sprint Retrospective: Equipe analisa o que funcionou e o que pode melhorar.
+            Resumo: Ciclos curtos e planejados (sprints), com entregas frequentes e colaboração constante.
+            XP (Extremme Progamming)
+            Como funciona na prática:
+            -TDD(test-driven Development): Antes de implementar o cadastro, escrevem um teste:"Usuário deve ter e-mail válido". Depois escrevem o código para passar no teste.
+            -Pair Programing(Programação em par): Dois desenvolvedores sentam juntos, um escreve código, o outro revisa em tempo real.
+            -Refatoração constante: Melhoram o código sempre que possível, sem mudar o comportamento.
+            -Integração contínua: Código novo é integrado e testado automaticamente várias vezes ao dia.
+            -Feedback frequente com o cliente: Mostram pequenas partes funcionando a cada poucos dias.
+            Kanvan
+            Como criar um quadro Kanban com colunas: -Criam um quadro kanban com colunas: A fazer -> Em progresso -> Concluído
+            -As tarefas são representadas por cartões(ex:"Corrigir bug no cadastro","Melhorar layout").
+            -Limitam o número de tarefas por colina : max 2 tarefas "em progresso".
+            -A equipe puxa as tarefas conforme termina as anteriores (modelo puxado).
+            -O foco é no fluxo continuo em vez de ciclos fixos.
+            Resumo: Visual, flexível, ideal para suporte e manutenção contínua de software.
+            Fundamentos da Orientação a objetos
+            -Abstração -Encapsulamento -Herança -Polimorfismo -Modelagem baseada em ojetos do mundo real
+            Sinergia entre OO e Métodos ágeis -Orientação a Objetos facilita refatorações frequentes -Testabilidade: objetos bem definidos facilitam testes automatizados -Modularidade: ajuda em entregas incrementais -Reutilização de código: ideal para desenvolvimento iterativo
+            Benefícios da Combinação -Maior flecibilidade para mudanças -Redução de retrabalho -Facilidade de testes automatizados -Código mais limpo e reutilizável -Melhor comunicação entre equipes
+            Extreme Programming (XP) e OO
+            -XP é altamente alinhado com OO Programação em par TDD (Test-driven Development) Refatoração contínua -OO permite criar testes unitários eficazes e reutilizaveis.
+            Práticas ágeis com OO
+            -Design Simples: foco no necessário, OO ajuda na organização -Responsabilidade única (SRP): cada classe -Código Limpo: nomes claros, baixa acoplamento -Padrões de Projeto(design patterns) auxiliam na manutenção
+            Exemplo prático
+            -Aplicação simples de cadastro de usuários
+            O princípio F.I.R.S.T.
+            Fast- Os testes devem executar rapidamente; Independent - Os testes unitarios devem ser indepentes um dos outros; Repeatable - Os testes unitários devem ser repetíveis; Self-validaling- Os testes unitários devem se auto validarem; Thorough & timely - Os testes unitários devem cobrir casos extremos.
+            Como faremos estes testes?
+            Utilizaremos o JUnit: que é um dos frameworks mais utilizados para testes em java. Ele fornece:
+            Anotações(@test)
+            Métodos de validação(assertEquals)
+            Execução automática dos testes
+            Relatório de sucesso/falha
+            Principais Assertions
+            assertEquals => assertEquals(10,valor);
+            Exemplo 1:
+            //Metodo Simples em JAVA public int somar(int a,int b){ return a+b; }
+            //teste @test public void testeSomar(){ assetEquals(5, calculadora.somar(2,3)); }
+            Exemplo 2:
+            public class Calculadora( public int dividir(int a, int b){ return a/b; } }
+            import org.junit.Test; import static org.junit.Assert;
+            public class CalculadoraTest{
+            @Testpublic void testeDividir(){ Calculadora calc=new Calculadora(); int resultado = calc.dividir(10,2); asserEquals(5,resultado);}
+            }
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
