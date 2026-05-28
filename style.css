@@ -166,4 +166,58 @@ body{
     }
 
 }
+```css id="pn5d6l"
+/* MAIN */
+
+.main{
+    margin-left:280px;
+    width:100%;
+    padding:40px;
+}
+
+/* HEADER */
+
+.header{
+    width:100%;
+    margin-bottom:35px;
+}
+
+.header h1{
+    width:100%;
+    font-size:72px;
+    font-weight:800;
+    text-align:center;
+    line-height:1.1;
+    letter-spacing:-2px;
+}
+
+/* GIF */
+
+.gif-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin-bottom:35px;
+}
+
+.gif-container img{
+    width:100%;
+    max-width:1200px;
+    border-radius:24px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.45);
+}
+
+/* TEXTO */
+
+.info-text{
+    width:100%;
+    text-align:center;
+}
+
+.info-text p{
+    font-size:28px;
+    font-weight:700;
+    color:#e2e8f0;
+}
 ```
+
