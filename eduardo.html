@@ -1,55 +1,419 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CG & Processamento de Imagens — Simulado</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  font-size: 15px;
+  min-height: 100vh;
+}
 
-<title>Nada Aqui</title>
+/* TOPBAR */
+#topbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #161b26;
+  border-bottom: 1px solid #1e2736;
+  padding: 0 32px;
+  height: 52px;
+  align-items: center;
+  gap: 16px;
+}
+.tb-nome { font-size: 14px; font-weight: 600; color: #f1f5f9; white-space: nowrap; }
+.tb-bar-wrap { flex: 1; height: 4px; background: #1e2736; border-radius: 2px; overflow: hidden; }
+.tb-bar { height: 100%; background: #3b82f6; width: 0%; transition: width 0.4s; border-radius: 2px; }
+.tb-scores { display: flex; gap: 14px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.tb-ok { color: #22c55e; }
+.tb-err { color: #ef4444; }
+.tb-prog { color: #4b5563; }
+.btn-rank-top {
+  background: transparent; color: #f59e0b;
+  border: 1px solid #374151; border-radius: 8px;
+  padding: 6px 14px; font-size: 13px; font-weight: 500;
+  cursor: pointer; white-space: nowrap; transition: border-color 0.15s;
+  font-family: inherit;
+}
+.btn-rank-top:hover { border-color: #f59e0b; }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+/* LOGIN */
+#screen-login {
+  min-height: 100vh; display: flex;
+  align-items: center; justify-content: center; padding: 40px 20px;
+}
+.login-card {
+  background: #161b26; border: 1px solid #1e2736;
+  border-radius: 16px; padding: 48px 40px;
+  width: 100%; max-width: 400px; text-align: center;
+}
+.login-card h1 { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
+.login-card p { font-size: 13px; color: #6b7280; margin-bottom: 28px; line-height: 1.6; }
+.login-card input {
+  width: 100%; background: #0f1117; border: 1px solid #1e2736;
+  border-radius: 8px; padding: 12px 14px; color: #f1f5f9;
+  font-size: 14px; outline: none; margin-bottom: 12px;
+  transition: border-color 0.15s; font-family: inherit;
+}
+.login-card input:focus { border-color: #3b82f6; }
+.login-card input::placeholder { color: #4b5563; }
+.btn-primary {
+  width: 100%; background: #3b82f6; color: #fff; border: none;
+  border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-bottom: 10px; transition: background 0.15s; font-family: inherit;
+}
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary {
+  width: 100%; background: transparent; color: #f59e0b;
+  border: 1px solid #374151; border-radius: 8px;
+  padding: 11px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: border-color 0.15s; font-family: inherit;
+}
+.btn-secondary:hover { border-color: #f59e0b; }
 
+/* QUIZ */
+#screen-quiz { display: none; max-width: 820px; margin: 0 auto; padding: 36px 24px 60px; }
+#quiz-heading h1 { font-size: 30px; font-weight: 800; color: #f1f5f9; margin-bottom: 6px; }
+#quiz-heading p { font-size: 13px; color: #6b7280; margin-bottom: 28px; }
+
+/* CARDS */
+.q-card {
+  background: #161b26; border: 1px solid #1e2736;
+  border-radius: 12px; padding: 26px; margin-bottom: 16px;
+}
+.q-num { font-size: 13px; font-weight: 600; color: #3b82f6; margin-bottom: 10px; }
+.q-ctx {
+  font-size: 13px; color: #6b7280; line-height: 1.65;
+  margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #1e2736;
+}
+.q-txt { font-size: 14px; color: #cbd5e1; line-height: 1.65; margin-bottom: 16px; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 15px; background: #1a2032;
+  border: 1px solid #1e2736; border-radius: 8px;
+  cursor: pointer; text-align: left; width: 100%;
+  font-family: inherit; font-size: 14px; color: #cbd5e1;
+  line-height: 1.55; transition: background 0.12s, border-color 0.12s;
+}
+.opt:hover:not(.locked) { background: #1e2a40; border-color: #2d3f5c; }
+.opt-l { font-size: 13px; font-weight: 600; color: #4b5563; min-width: 20px; flex-shrink: 0; margin-top: 1px; }
+.opt.correct { background: #052e16; border-color: #16a34a; color: #86efac; }
+.opt.correct .opt-l { color: #22c55e; }
+.opt.wrong { background: #1f1215; border-color: #b91c1c; color: #fca5a5; opacity: 0.75; }
+.opt.wrong .opt-l { color: #ef4444; }
+.opt.locked { cursor: default; pointer-events: none; }
+.explanation {
+  display: none; margin-top: 12px; padding: 13px 15px;
+  border-radius: 8px; font-size: 13px; line-height: 1.65; border-left: 3px solid;
+}
+.explanation.show { display: block; }
+.explanation.ok { background: #052e16; border-color: #16a34a; color: #86efac; }
+.explanation.fail { background: #1f1215; border-color: #b91c1c; color: #fca5a5; }
+.exp-tag {
+  display: block; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase;
+}
+.ok .exp-tag { color: #22c55e; }
+.fail .exp-tag { color: #ef4444; }
+
+/* RESULTADO */
+#screen-result {
+  display: none; min-height: 100vh;
+  align-items: center; justify-content: center; padding: 40px 24px;
+}
+.result-card {
+  background: #161b26; border: 1px solid #1e2736;
+  border-radius: 16px; padding: 48px 40px;
+  max-width: 440px; width: 100%; text-align: center;
+}
+.result-card h2 { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; }
+.result-pct { font-size: 64px; font-weight: 800; color: #3b82f6; line-height: 1; margin-bottom: 10px; }
+.result-sub { font-size: 14px; color: #6b7280; margin-bottom: 28px; }
+.result-sub strong { color: #f1f5f9; }
+.sync-msg { font-size: 12px; color: #4b5563; margin-top: 12px; }
+
+/* RANKING */
+#screen-ranking { display: none; min-height: 100vh; padding: 48px 24px; }
+.rank-wrap { max-width: 580px; margin: 0 auto; }
+.rank-title { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 24px; }
+.rank-table { width: 100%; border-collapse: collapse; }
+.rank-table th {
+  text-align: left; font-size: 11px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: #4b5563; padding: 10px 14px; border-bottom: 1px solid #1e2736;
+}
+.rank-table td { padding: 13px 14px; font-size: 14px; color: #cbd5e1; border-bottom: 1px solid #1a2032; }
+.rank-pos { font-weight: 700; color: #6b7280; }
+.rank-pts { font-weight: 700; color: #22c55e; text-align: right; }
+.rank-me td { color: #fbbf24 !important; background: #1c1a10; }
+.rank-me .rank-pts { color: #fbbf24 !important; }
+.rank-loading { color: #4b5563; font-size: 13px; padding: 20px 14px; }
+.rank-actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.btn-back {
+  background: #1e2736; color: #93c5fd; border: 1px solid #1e2736;
+  border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: border-color 0.15s; font-family: inherit;
+}
+.btn-back:hover { border-color: #3b82f6; }
+.btn-reload {
+  background: transparent; color: #6b7280; border: 1px solid #1e2736;
+  border-radius: 8px; padding: 10px 18px; font-size: 13px;
+  cursor: pointer; font-family: inherit; transition: color 0.15s;
+}
+.btn-reload:hover { color: #f1f5f9; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1e2736; border-radius: 3px; }
+</style>
 </head>
-
 <body>
 
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-    <div class="logo">
-        📘 Estudos
-    </div>
-
-    <h2>Provas</h2>
-
-    <div class="menu">
-        <a href="index.html"> Pagina inicial</a>
-        <a href="rodrigo.html">Prova 28/05 - Rodrigo</a>
-        <a href="samuel1.html">Prova 28/05 - Samuel</a>
-        <a href="eduardo.html">Prova 01/06 - Eduardo</a>
-        <a href="samuel2.html">Prova 02/06 - Samuel</a>
-        <a href="regina.html">Prova 03/06 - Regina</a>
-        <a href="materiadorodrigo"> Materia do rodrigo </a>
-    </div>
-
+<div id="topbar">
+  <span class="tb-nome" id="tb-nome">—</span>
+  <div class="tb-bar-wrap"><div class="tb-bar" id="tb-bar"></div></div>
+  <div class="tb-scores">
+    <span class="tb-ok" id="tb-ac">✓ 0</span>
+    <span class="tb-err" id="tb-err">✗ 0</span>
+    <span class="tb-prog" id="tb-prog">0/50</span>
+  </div>
+  <button class="btn-rank-top" onclick="verRanking(true)">🏆 Ranking</button>
 </div>
 
-<!-- MAIN -->
-
-<div class="main">
-
-    <div class="header">
-
-        <h1>🚧 Nada aqui ainda 🚧</h1>
-
-        <p>
-            Essa prova ainda não foi adicionada.
-        </p>
-
-    </div>
-
+<div id="screen-login">
+  <div class="login-card">
+    <h1>Questionários</h1>
+    <p>CG &amp; Processamento de Imagens<br>Insira seu nome para iniciar e registrar no ranking.</p>
+    <input type="text" id="input-nome" placeholder="Seu nome ou apelido..." autocomplete="off">
+    <button class="btn-primary" onclick="iniciar()">▶ Entrar no Simulado</button>
+    <button class="btn-secondary" onclick="verRanking(false)">🏆 Ver Ranking Atual</button>
+  </div>
 </div>
 
+<div id="screen-quiz">
+  <div id="quiz-heading">
+    <h1>CG &amp; Processamento de Imagens — Exercícios</h1>
+    <p>Clique em uma alternativa para responder. Ao errar, a resposta correta será destacada em verde.</p>
+  </div>
+  <div id="quiz-body"></div>
+</div>
+
+<div id="screen-result">
+  <div class="result-card">
+    <h2>Simulado Concluído! 🎉</h2>
+    <div class="result-pct" id="res-pct">0%</div>
+    <div class="result-sub">Você acertou <strong id="res-ac">0</strong> de <strong>50</strong> questões.</div>
+    <button class="btn-primary" onclick="verRanking(false)">🏆 Ver Ranking Final</button>
+    <div class="sync-msg" id="sync-msg">Sincronizando resultado...</div>
+  </div>
+</div>
+
+<div id="screen-ranking">
+  <div class="rank-wrap">
+    <div class="rank-title">🏆 Ranking Global</div>
+    <table class="rank-table">
+      <thead><tr>
+        <th style="width:48px">Pos</th>
+        <th>Nome</th>
+        <th style="text-align:right">Acertos</th>
+      </tr></thead>
+      <tbody id="rank-body">
+        <tr><td colspan="3" class="rank-loading">Carregando...</td></tr>
+      </tbody>
+    </table>
+    <div class="rank-actions">
+      <button class="btn-back" id="btn-voltar" onclick="fecharRanking()" style="display:none">← Voltar ao Simulado</button>
+      <button class="btn-reload" onclick="location.reload()">↺ Nova Tentativa</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://sheetdb.io/api/v1/3kdw59bdva45d";
+let nome = "", acertos = 0, erros = 0, respondidas = 0;
+const answered = {};
+const TOTAL = 50;
+
+const Q = [
+  {n:1,ctx:"Uma startup de jogos eletrônicos está desenvolvendo um simulador de direção em ambiente urbano. A equipe técnica precisa garantir que o jogo rode a 60 frames por segundo (FPS) em consoles de nova geração, mas o diretor de arte exige que os reflexos nos carros e poças d'água sejam fisicamente precisos para aumentar a imersão. Ao analisar as opções de renderização, a equipe se depara com o \"Muro Computacional\" provocado pela explosão combinatória de cálculos.",p:"Avalie as características das técnicas de renderização e selecione a estratégia técnica mais adequada para equilibrar o desempenho de 60 FPS com a necessidade de reflexos precisos, considerando o padrão atual da indústria.",o:{A:"Utilizar apenas Rasterização, pois é extremamente rápida e ideal para tempo real, apesar de os reflexos serem apenas aproximações matemáticas.",B:"Implementar o Ray Tracing Puro, pois garante realismo absoluto e precisão em reflexos e refrações, independentemente do custo computacional.",C:"Adotar a Renderização Híbrida, utilizando rasterização para a geometria base e Ray Tracing para o cálculo de luzes e reflexos específicos.",D:"Optar pelo Path Tracing recursivo sem limites de subdivisão, visando a máxima fidelidade visual em cada pixel da cena urbana."},c:"C",e:"A Renderização Híbrida é o padrão atual da indústria: usa rasterização para a geometria base (rápida) e aplica Ray Tracing seletivamente para reflexos e iluminação (preciso). Isso equilibra performance de 60 FPS com a qualidade visual exigida."},
+  {n:2,ctx:"Durante o desenvolvimento de um renderizador customizado, um engenheiro de software percebe que o sistema gasta a maior parte do tempo de processamento tentando localizar qual objeto da cena foi atingido por cada raio disparado pela câmera. Para otimizar o projeto, ele decide utilizar tecnologias de hardware dedicado presentes nas GPUs modernas.",p:"Analise o funcionamento do hardware de aceleração e identifique qual componente é projetado especificamente para resolver o problema de gargalo descrito no texto-base.",o:{A:"CUDA Cores, que são responsáveis por realizar a rasterização tradicional e cálculos genéricos de sombreamento.",B:"RT Cores, que possuem circuitos dedicados para acelerar a travessia da estrutura BVH e o cálculo de intersecções raio-triângulo.",C:"Tensor Cores, que atuam na execução de redes neurais para reconstruir frames em alta fidelidade por meio do Denoising.",D:"Memória Integrada da GPU, cujo único limite é a quantidade de dados que determina a complexidade da cena a ser exibida."},c:"B",e:"Os RT Cores são circuitos físicos dedicados exclusivamente à travessia da estrutura BVH e ao cálculo de intersecção raio-triângulo — exatamente o gargalo descrito. Eles executam essa tarefa em hardware, liberando os CUDA Cores para outros cálculos."},
+  {n:3,ctx:"O algoritmo de Ray Tracing é fundamentado na simulação do comportamento da luz, mas sua implementação computacional inverte a lógica física da natureza para ganhar eficiência. Em vez de rastrear fótons da fonte de luz até o olho, o algoritmo dispara raios a partir do observador.",p:"Considerando o paradigma do \"Rastreamento Reverso\", avalie por que essa técnica é considerada o método padrão para a eficiência computacional em renderização.",o:{A:"Porque rastrear fótons a partir da fonte de luz é impossível matematicamente, exigindo que a física seja invertida para funcionar.",B:"Porque evita o desperdício de processamento ao não calcular bilhões de fótons que nunca atingiriam a câmera ou o olho do observador.",C:"Porque permite que a luz viaje mais rápido no ambiente virtual do que na natureza, reduzindo o tempo de renderização por pixel.",D:"Porque elimina a necessidade de fontes de luz na cena, já que os raios partem diretamente do plano de visualização 2D."},c:"B",e:"Fontes de luz emitem fótons em todas as direções — a imensa maioria nunca chega ao observador. Rastrear a partir do olho garante que apenas os raios que efetivamente contribuem para a imagem sejam calculados, eliminando bilhões de cálculos desnecessários."},
+  {n:4,ctx:"Em uma cena de interior arquitetônico renderizada com poucos raios por pixel para economizar performance, a imagem resultante apresenta um aspecto granulado e com artefatos visíveis, conhecido como \"ruído\". Para solucionar isso em tempo real, os desenvolvedores aplicam técnicas de Inteligência Artificial.",p:"Analise a aplicação de algoritmos de Denoising no contexto da renderização moderna e escolha a alternativa que descreve corretamente sua função prática.",o:{A:"Aumentar a quantidade de raios disparados por pixel até que o ruído desapareça naturalmente pelo poder de processamento bruto.",B:"Substituir completamente o algoritmo de Ray Tracing por uma rede neural que gera imagens estáticas sem cálculos geométricos.",C:"Utilizar redes neurais para prever e preencher as lacunas visuais, reconstruindo o frame em alta fidelidade com menos raios disparados.",D:"Limpar a lente da câmera virtual para remover poeira digital que causa a impressão de granulação nas superfícies dos objetos."},c:"C",e:"O Denoising usa redes neurais treinadas para inferir os pixels faltantes a partir de uma amostra esparsa de raios, reconstruindo o frame completo em alta fidelidade. Permite usar menos raios por pixel sem sacrificar qualidade visual."},
+  {n:5,ctx:"O Ray Tracing é um algoritmo recursivo. Ao atingir uma superfície transparente, como um copo de vidro, o raio primário pode gerar novos raios para processar a cor final do pixel. O documento descreve que a cor final é uma \"soma formidável\" de diferentes componentes.",p:"Com base no modelo de sombreamento e na recursividade do algoritmo, avalie quais componentes devem ser combinados para calcular a cor de um pixel que intersecta um objeto semitransparente e reflexivo.",o:{A:"Apenas a cor do fundo da cena, já que raios que atravessam objetos transparentes não possuem cor própria definida.",B:"A soma das componentes ambiente, difusa e especular, ignorando as chamadas recursivas para manter o desempenho estável.",C:"A combinação do modelo de atenuação de Phong com as contribuições dos raios secundários de reflexão e refração.",D:"Apenas o raio de sombra, para garantir que o objeto transparente projete uma sombra opaca e perfeitamente negra no chão."},c:"C",e:"Para um objeto semitransparente e reflexivo, a cor final combina as componentes locais do modelo de Phong (ambiente + difusa + especular) com as contribuições recursivas: o raio de reflexão e o raio de refração."},
+  {n:6,ctx:"Um profissional de arquitetura precisa apresentar um projeto de iluminação natural para um cliente. Ele precisa demonstrar como a luz do sol entra pelas janelas, reflete no piso de mármore e ilumina indiretamente o teto. Para isso, ele utiliza um software que simula o traçado de raios.",p:"Analise as capacidades do Ray Tracing descritas nas fontes e identifique qual característica da técnica permite atender à necessidade desse profissional.",o:{A:"A capacidade de converter modelos 3D em pixels 2D de forma extremamente rápida, ideal para apresentações em tablets simples.",B:"A simulação realista de iluminação indireta, reflexos, refrações e sombras fisicamente precisos através do rastreamento da luz.",C:"O uso de polígonos aproximados que substituem a necessidade de cálculos matemáticos sobre o comportamento da luz solar.",D:"A exclusão de raios de sombra, permitindo que a luz atravesse todos os objetos da cena sem criar áreas escuras no ambiente."},c:"B",e:"O Ray Tracing simula fisicamente o caminho da luz: luz solar entrando pela janela, refletindo no mármore e iluminando indiretamente o teto. Essa capacidade de rastrear caminhos completos da luz é o que diferencia a técnica."},
+  {n:7,ctx:"Para evitar que o algoritmo de Ray Tracing entre em um loop infinito ao processar reflexos entre dois espelhos paralelos, os programadores implementam critérios de parada na recursividade.",p:"Avalie as estratégias de controle do algoritmo e selecione o critério correto utilizado para encerrar a inspeção recursiva de raios secundários.",o:{A:"Encerrar quando o raio atingir a fonte de luz primária, independentemente de quantas reflexões ele tenha sofrido antes.",B:"Estabelecer um limite máximo de subdivisões ou parar quando a contribuição do raio secundário for inferior a um valor mínimo definido.",C:"Parar o processamento assim que o primeiro objeto for atingido pelo raio primário, ignorando qualquer interação subsequente.",D:"Manter a recursão ativa até que todos os pixels da tela atinjam a mesma cor, garantindo a uniformidade cromática da imagem final."},c:"B",e:"Dois critérios de parada são utilizados: (1) limite máximo de profundidade de recursão e (2) limiar de contribuição mínima — se o raio contribui menos que X% para a cor final, é descartado. Ambos evitam loops infinitos."},
+  {n:8,ctx:"A técnica de Ray Tracing utiliza diferentes tipos de \"raios secundários\" após a intersecção inicial do raio primário com um objeto da cena. Cada tipo de raio possui uma função específica para determinar a luminosidade e a cor do ponto atingido.",p:"Considere um ponto P em uma cena. Para determinar se esse ponto está em uma zona de penumbra ou escuridão, qual procedimento o algoritmo deve realizar?",o:{A:"Disparar um raio refletor para verificar se a luz de outros objetos está atingindo o ponto P por meio de espelhamento.",B:"Disparar um raio de sombra a partir do ponto P em direção ao foco de luz; se houver obstrução, o ponto está na sombra.",C:"Disparar um raio refrator para calcular como a luz atravessa o objeto e ilumina seu interior de forma difusa e homogênea.",D:"Disparar um raio primário de volta para a câmera para confirmar se o observador ainda está olhando para aquela posição."},c:"B",e:"O raio de sombra parte do ponto P diretamente em direção à fonte de luz. Se algum objeto interceptar esse caminho antes de chegar à fonte, P está na sombra. É o mecanismo direto do Ray Tracing para calcular oclusão de luz."},
+  {n:9,ctx:"A evolução do hardware permitiu que o Ray Tracing, antes restrito ao cinema e sistemas não-real-time, chegasse aos videogames. No entanto, as GPUs possuem limitações físicas que afetam a complexidade da cena.",p:"Avalie o papel da memória integrada na GPU para a renderização de cenas realistas via Ray Tracing, conforme apontado nos documentos.",o:{A:"A memória determina a velocidade de disparo dos raios, mas não interfere na quantidade de objetos que a cena pode conter.",B:"A memória integrada é irrelevante, pois o Ray Tracing em tempo real depende exclusivamente dos núcleos CUDA para funcionar.",C:"A quantidade de memória integrada determina o limite de complexidade da cena (objetos, texturas) que pode ser renderizada.",D:"A memória serve apenas para armazenar os algoritmos de IA, enquanto a geometria da cena fica armazenada no processador (CPU)."},c:"C",e:"A VRAM precisa armazenar toda a geometria da cena, texturas e estruturas BVH. Quando a cena é mais complexa do que a VRAM comporta, é impossível renderizá-la. A memória integrada é o limite físico de complexidade de cena no Ray Tracing em tempo real."},
+  {n:10,ctx:"Um estudante de Computação Gráfica está implementando o algoritmo básico de Ray Tracing. Ele escreveu um código que percorre cada pixel da imagem e dispara um raio. Ele precisa tratar o caso em que o raio disparado não atinge nenhum objeto da cena.",p:"Com base na lógica do algoritmo de traçado de raios, qual deve ser a decisão do sistema quando o NearestObject retornar um valor nulo (NULL)?",o:{A:"O pixel correspondente deve ser preenchido com a cor preta obrigatoriamente, indicando erro no processamento do raio.",B:"O algoritmo deve reiniciar o disparo do raio a partir de um ângulo diferente até que algum objeto seja finalmente encontrado.",C:"O pixel deve ser preenchido com a cor definida para o fundo da cena, indicando que o raio se perdeu no \"infinito\".",D:"O sistema deve lançar raios de sombra recursivos para tentar iluminar o vazio e encontrar objetos invisíveis por refração."},c:"C",e:"Quando nenhum objeto é intersectado, o raio se perdeu no infinito da cena — é simplesmente o fundo. O pixel recebe a cor de fundo definida. Usar preto obrigatório seria incorreto; relançar raios seria ineficiente."},
+  {n:11,ctx:"Uma desenvolvedora de jogos indie está criando um simulador de exploração espacial para dispositivos móveis com hardware limitado. O diretor técnico precisa decidir entre implementar um modelo de iluminação global complexo ou um modelo de iluminação local, como o modelo de Phong, para garantir que o jogo mantenha uma taxa de quadros estável sem sacrificar totalmente a estética visual.",p:"Avalie as características dos modelos de iluminação apresentados e escolha a decisão técnica mais adequada para esse cenário de restrição de hardware.",o:{A:"Implementar o Ray Tracing completo, pois ele simplifica o processamento ao ignorar as reflexões diretas da luz.",B:"Adotar o modelo de iluminação local, pois ele considera apenas reflexões diretas e reduz a complexidade computacional.",C:"Utilizar modelos de iluminação global, que são ideais para dispositivos móveis por exigirem menos memória de vídeo.",D:"Descartar o uso de malhas poligonais, uma vez que o modelo de Phong funciona apenas com superfícies analíticas curvas."},c:"B",e:"O modelo de iluminação local (como Phong) calcula apenas a interação direta entre luz, superfície e observador, sem rastrear reflexos globais. É muito menos custoso computacionalmente, adequado para hardware mobile."},
+  {n:12,ctx:"Durante a renderização de um protótipo de mobiliário em 3D, um designer percebe que as superfícies curvas de um sofá parecem \"facetadas\", com divisões claras entre os polígonos planos, apesar de a malha ser densa. O programador gráfico sugere alterar o método de tonalização para melhorar a aparência sem aumentar o número de polígonos.",p:"Analise as técnicas de tonalização (shading) e identifique qual método deve ser aplicado para que o objeto pareça ter uma superfície suave.",o:{A:"Tonalização constante, que aplica a mesma cor em todos os pontos do polígono a partir de um único vértice.",B:"Tonalização por textura, que substitui a geometria do objeto por uma imagem bidimensional de baixa resolução.",C:"Tonalização interpolada, que aproxima polígonos planos a superfícies curvas calculando cores entre os vértices.",D:"Tonalização local, que ignora os vetores normais do polígono para gerar uma iluminação uniforme e chapada."},c:"C",e:"A tonalização interpolada interpola as normais ou cores entre os vértices, criando variação suave de iluminação que simula curvatura contínua sem adicionar polígonos — elimina o aspecto facetado."},
+  {n:13,ctx:"Uma empresa de arquitetura digital precisa criar um modelo 3D de um pavilhão com grandes paredes de madeira rústica. Para manter o realismo visual dos veios da madeira sem sobrecarregar o motor de renderização com \"milhões de polígonos\", a equipe decide aplicar uma técnica de mapeamento.",p:"Com base nos conceitos de otimização de cenas 3D, selecione a estratégia correta para alcançar o realismo desejado com eficiência de processamento.",o:{A:"Aumentar a malha poligonal até que cada detalhe da madeira seja um polígono individual, garantindo fidelidade.",B:"Utilizar a tonalização constante em tons de marrom para simular a variação natural de cores da madeira real.",C:"Aplicar uma textura, sobrepondo uma imagem bidimensional ao polígono por meio do mapeamento de coordenadas.",D:"Substituir a iluminação local por Ray Casting para que os detalhes da madeira surjam naturalmente da reflexão difusa."},c:"C",e:"Mapeamento de textura é a técnica padrão: uma imagem fotográfica dos veios de madeira é colada sobre o polígono plano via coordenadas UV — resultado visualmente rico com custo geométrico zero."},
+  {n:14,ctx:"Em um simulador de física óptica, deseja-se representar como a luz incide sobre uma superfície rugosa de gesso. O sistema deve calcular a intensidade da luz refletida em diversos ângulos para garantir que a percepção de brilho seja a mesma, independentemente da posição do observador.",p:"Considerando as propriedades da reflexão difusa, avalie quais fatores determinam a quantidade de luz que um ponto de projeção receberá nesse simulador.",o:{A:"Apenas a cor intrínseca da fonte de luz, ignorando o ângulo de incidência sobre a superfície do objeto.",B:"A distância entre os pontos de reflexão e projeção, a distância até a fonte e o ângulo θ com a normal.",C:"A quantidade de pixels da tela de projeção, que define se a reflexão será processada como global ou local.",D:"O uso exclusivo de tonalização interpolada, que elimina a necessidade de calcular a normal da superfície."},c:"B",e:"Pela Lei de Lambert, a intensidade da reflexão difusa depende do cosseno do ângulo de incidência θ com a normal, da distância à fonte e da distância ao ponto de projeção. Todos os três fatores geométricos são necessários."},
+  {n:15,ctx:"O modelo de Phong é amplamente utilizado em computação gráfica por decompor a luminosidade incidente em três componentes fundamentais: difusa, especular e ambiente. Uma equipe de desenvolvimento está ajustando esses parâmetros para simular o material de uma caneta de plástico brilhante sob uma luz direta.",p:"Para obter o efeito de um ponto de brilho intenso (reflexo da lâmpada) na superfície da caneta, qual componente do modelo de Phong deve ser priorizada no ajuste?",o:{A:"Componente ambiente, que representa a luz refletida por outros objetos da cena de forma homogênea.",B:"Componente difusa, que garante que a luz reflita em diversos ângulos com a mesma intensidade.",C:"Componente especular, que depende do ângulo do raio da fonte de luz e do raio traçado para o centro de projeção.",D:"Componente de textura, que substitui o cálculo físico da luz por uma fotografia estática do material plástico."},c:"C",e:"O brilho intenso localizado (highlight) é a componente especular do modelo de Phong — altamente direcional, concentrada na direção de reflexão perfeita, responsável pela bolinha de luz em superfícies brilhantes."},
+  {n:16,ctx:"Um engenheiro de software está depurando um algoritmo de renderização e nota que, embora o modelo 3D seja complexo, a memória está sendo consumida excessivamente pelo armazenamento de cores para cada ponto da malha. Ele decide implementar um modelo de tonalização que otimize esse armazenamento.",p:"Avalie a função dos modelos de tonalização e selecione a alternativa que descreve como eles auxiliam na economia de armazenamento de dados do modelo 3D.",o:{A:"Eles permitem calcular a cor de infinitos pontos internos a partir de vértices finitos, sem precisar armazenar cada ponto.",B:"Eles convertem automaticamente imagens 2D em malhas 3D de alta densidade, reduzindo a necessidade de texturas.",C:"Eles eliminam a necessidade de vetores normais, armazenando apenas a posição global da fonte de luz na cena.",D:"Eles substituem o centro de projeção por um modelo de iluminação global que não exige processamento de cores."},c:"A",e:"Modelos de tonalização calculam a cor de qualquer ponto interno matematicamente, interpolando a partir dos vértices. Apenas os vértices precisam ser armazenados — infinitos pontos intermediários são computados sob demanda."},
+  {n:17,ctx:"O cálculo das componentes especular e difusa da luz é sensível à geometria da cena. Conforme as fontes, esses cálculos dependem fundamentalmente da relação angular entre os raios e a superfície atingida.",p:"Considere a interseção de um raio com um polígono. Quais são os dois ângulos críticos em relação à normal do polígono necessários para determinar as componentes da luz?",o:{A:"O ângulo de refração interna do material e o ângulo de inclinação do monitor do usuário.",B:"O ângulo do raio a partir do centro de projeção e o ângulo do raio proveniente da fonte de luz.",C:"O ângulo de rotação da câmera no eixo Z e o ângulo de curvatura da malha poligonal externa.",D:"O ângulo de interpolação entre dois polígonos vizinhos e o ângulo de preenchimento da textura 2D."},c:"B",e:"Para calcular a iluminação são necessários dois ângulos com a normal: (1) ângulo do vetor à fonte de luz — componente difusa e especular; (2) ângulo do vetor ao observador/câmera — componente especular e visibilidade."},
+  {n:18,ctx:"Ao aplicar uma textura de \"parede de tijolos\" em um polígono plano que representa uma fachada, um desenvolvedor nota que o padrão de tijolos aparece distorcido. Ele revisa o processo de mapeamento para corrigir o problema.",p:"Analise o funcionamento da aplicação de texturas e identifique o procedimento correto para obter a cor de um ponto no interior do polígono de forma precisa.",o:{A:"Calcular a média aritmética das cores dos vértices e aplicar um filtro de tonalização constante sobre a parede.",B:"Realizar o mapeamento das coordenadas dos vértices sobre a imagem e extrair os pontos internos dessa imagem.",C:"Ignorar as coordenadas dos vértices e projetar a imagem 2D de forma aleatória até cobrir toda a malha poligonal.",D:"Converter a imagem de textura em uma malha de milhões de polígonos para que a tonalização interpolada a reconheça."},c:"B",e:"O mapeamento UV associa os vértices do polígono 3D a coordenadas (u,v) na imagem de textura. Para qualquer ponto interno, interpolam-se as coordenadas UV dos vértices e lê-se o pixel correspondente na textura."},
+  {n:19,ctx:"Modelos de iluminação são representações matemáticas da física da reflexão da luz em superfícies. Eles buscam simular como a luz chega até o ponto de projeção na tela. Em computação gráfica, os materiais são representados por malhas poligonais.",p:"Considerando que o material é uma malha poligonal, o que ocorre exatamente quando a luz reflete sobre ele, de acordo com o modelo de iluminação?",o:{A:"A malha poligonal é destruída e substituída por uma imagem de textura para economizar processamento.",B:"O sistema projeta na tela a cor do material no ponto exato de reflexão da luz.",C:"A luz atravessa os polígonos sem sofrer desvio, pois malhas poligonais não possuem propriedades físicas de reflexão.",D:"O modelo de iluminação altera a geometria dos vértices para que o objeto se mova em direção à fonte de luz."},c:"B",e:"O modelo calcula matematicamente as interações de luz no ponto de intersecção usando normais, ângulos e distâncias — e determina qual cor aparece na tela para aquele pixel, projetando-a no plano de visualização."},
+  {n:20,ctx:"Um sistema de CAD (Desenho Auxiliado por Computador) utiliza \"tonalização constante\" para renderizar peças mecânicas em modo de rascunho. O usuário reclama que é difícil distinguir a curvatura de peças cilíndricas nesse modo.",p:"Avalie a limitação técnica da tonalização constante nesse cenário profissional e aponte o motivo do problema relatado pelo usuário.",o:{A:"A tonalização constante gera cores diferentes para cada pixel, confundindo a percepção de profundidade do cilindro.",B:"Como todos os vetores normais de um polígono plano são paralelos, o polígono inteiro recebe uma única cor uniforme.",C:"Esse modelo exige o uso de Ray Tracing global, que escurece excessivamente as superfícies curvas das peças.",D:"A técnica depende de texturas fotográficas que não podem ser aplicadas em objetos cilíndricos ou esféricos."},c:"B",e:"Na tonalização constante, calcula-se um único valor de iluminação por polígono usando a normal média. Todos os pixels recebem a mesma cor — criando fronteiras duras e tornando impossível perceber a curvatura contínua do cilindro."},
+  {n:21,ctx:"Uma empresa de logística utiliza visão computacional para ler códigos de identificação em embalagens. Devido à iluminação variável do galpão, muitas imagens capturadas apresentam baixo contraste, dificultando a distinção entre o código e o fundo. O engenheiro responsável precisa implementar um ajuste que redistribua os tons de cinza de forma não linear para destacar os detalhes sem perder informações nas áreas muito claras ou muito escuras.",p:"Avalie as técnicas de processamento pontual e selecione a ferramenta matemática mais versátil para realizar esse ajuste customizado de contraste por meio de uma função de mapeamento (Lookup Table).",o:{A:"Inversão de imagem, que subtrai o valor do pixel do valor máximo para destacar detalhes ocultos.",B:"Limiarização (Thresholding), que converte a imagem para binária definindo um valor fixo de corte.",C:"Ajuste por Curva de Cores, que permite aumentar o contraste ou corrigir o brilho de forma não linear.",D:"Filtro de Média, que utiliza uma matriz de valores constantes para calcular a média local da vizinhança."},c:"C",e:"A Curva de Cores via Lookup Table permite mapear qualquer valor de entrada para qualquer saída de forma não linear e customizada — realce em sombras sem queimar altas luzes. Inversão e limiarização são transformações fixas menos versáteis."},
+  {n:22,ctx:"Um sistema de segurança monitora um perímetro utilizando câmeras térmicas. As imagens brutas sofrem com \"ruídos de alta frequência\" (pontos brancos aleatórios) causados por interferência eletromagnética, o que gera alarmes falsos nos algoritmos de detecção de movimento.",p:"Analise o problema do ruído descrito e considere qual filtro espacial deve ser aplicado na etapa de pré-processamento para eliminar esses ruídos e preparar a imagem para uma detecção de bordas mais precisa.",o:{A:"Operador Laplaciano, por ser extremamente sensível a mudanças bruscas de intensidade e ruídos.",B:"Filtro Gaussiano, que aplica um desfoque matemático para eliminar ruídos de alta frequência.",C:"Filtro de Sobel, que calcula o gradiente da imagem em direções específicas para identificar contornos.",D:"Inversão de Imagem, que transforma áreas escuras em claras para facilitar a visão noturna do operador."},c:"B",e:"O filtro Gaussiano é um passa-baixa que suaviza a imagem eliminando variações abruptas de alta frequência. É o pré-processamento padrão antes de detecção de bordas — o Laplaciano e Sobel amplificariam o ruído."},
+  {n:23,ctx:"Um laboratório de agronomia está automatizando a contagem de sementes em fotos de alta resolução. O software deve identificar o contorno exato de cada semente. Durante os testes, o programador percebeu que o filtro utilizado era \"direcional\", ou seja, detectava bem as bordas horizontais, mas falhava nas verticais das sementes ovais.",p:"Com base na taxonomia de filtros de detecção de bordas, avalie qual operador seria o mais indicado para detectar as bordas das sementes em todas as direções de uma só vez (omni-direcional).",o:{A:"Filtro de Sobel (LR), focado exclusivamente no gradiente horizontal da imagem para identificar contornos.",B:"Filtro de Média, que reduz os detalhes agudos da imagem e suaviza as bordas para facilitar a contagem.",C:"Operador Laplaciano, que, por ser baseado em segunda derivada, detecta zonas de mudança em todas as direções.",D:"Limiarização Simples, que remove as bordas e mantém apenas o centro de massa de cada semente capturada."},c:"C",e:"O Laplaciano é isotrópico — detecta transições em todas as direções simultaneamente. O Sobel é direcional (horizontal OU vertical separadamente), daí o problema descrito com as bordas verticais."},
+  {n:24,ctx:"No desenvolvimento de um pipeline de visão computacional, a ordem das operações é crítica. Um desenvolvedor aplicou um operador de segunda derivada (Laplaciano) diretamente em uma imagem bruta de grãos. O resultado foi uma imagem \"destruída\", onde cada micro-variação de textura e ruído do fundo foi amplificada, tornando as bordas estruturais imperceptíveis.",p:"Considere a situação profissional descrita e determine qual ação técnica deve ser tomada para corrigir o pipeline de processamento e obter bordas limpas.",o:{A:"Substituir a imagem original por uma versão invertida matematicamente para reduzir a distância até o branco.",B:"Aplicar um filtro de suavização (como o Gaussiano) antes da extração de bordas para preservar a macro-estrutura.",C:"Aumentar o limite do Threshold para que apenas os pixels de ruído sejam convertidos em branco puro (255).",D:"Executar o operador Laplaciano repetidas vezes até que o ruído seja eliminado pela soma das derivadas."},c:"B",e:"Pipeline correto: Gaussiano primeiro (atenua ruído de alta frequência), depois Laplaciano (detecta bordas estruturais genuínas). Aplicar Laplaciano direto em imagem bruta amplifica tudo, inclusive ruídos."},
+  {n:25,ctx:"Um aplicativo de digitalização de documentos precisa transformar fotos de recibos em imagens binárias (preto e branco puro) para economizar espaço de armazenamento e facilitar o reconhecimento de texto (OCR). O sistema deve decidir quais pixels pertencem ao texto (escuro) e quais ao papel (claro).",p:"Analise o funcionamento da operação descrita e identifique o comando lógico que representa matematicamente a criação dessa máscara binária, dado um limiar th.",o:{A:"g(x,y) = 255 - f(x,y), para inverter a distância do pixel até o branco absoluto.",B:"g(x,y) = ΣΣ(Kernel × Janela), para calcular a média de cores da vizinhança.",C:"g(x,y) = 255 se f(x,y) > th, senão 0, gerando um array booleano forçado para branco ou preto.",D:"g(x,y) = lookup_table[f(x,y)], para mapear dinamicamente cada tom de cinza em uma nova curva."},c:"C",e:"A limiarização é essa comparação condicional: pixel mais brilhante que th → branco (255, papel); senão → preto (0, texto). Resultado: imagem binária com dois únicos valores, ideal para OCR e compressão."},
+  {n:26,ctx:"O \"Mecanismo da Convolução\" é a base para quase todas as operações espaciais em imagens digitais. Ele consiste no deslizamento de uma matriz pequena (kernel) sobre a imagem original para gerar um novo valor para o pixel central baseado em sua vizinhança.",p:"Avalie o impacto computacional e o funcionamento desse mecanismo. Se um kernel de 3×3 preenchido com valores 1/9 for aplicado sobre uma janela de pixels, qual será o efeito visual resultante na imagem?",o:{A:"Detecção de bordas finas, pois a soma dos pesos 1/9 destaca as diferenças bruscas de intensidade.",B:"Suavização da imagem (blur), pois o valor resultante será a média aritmética dos pixels daquela vizinhança.",C:"Inversão cromática, pois a convolução subtrai sistematicamente os valores da janela do valor máximo.",D:"Aumento de contraste, pois o kernel de 3×3 amplifica as variações de tons escuros para tons claros."},c:"B",e:"Kernel 3×3 com todos os valores 1/9 soma os 9 pixels e divide por 9 — calculando a média local. A média suaviza transições abruptas resultando em blur. É o Filtro de Média clássico."},
+  {n:27,ctx:"Um engenheiro biomédico está analisando radiografias digitais. Ele precisa de um método que não apenas detecte bordas, mas que seja capaz de identificar o \"gradiente\" (a direção da mudança de intensidade) para entender a densidade óssea em áreas específicas (horizontal ou vertical).",p:"Considerando as ferramentas de processamento digital de imagens, escolha o operador de primeira derivada mais adequado para fornecer informações direcionais específicas sobre os contornos.",o:{A:"Operador de Sobel, que calcula o gradiente em direções específicas como LR (esquerda-direita) ou UD (cima-baixo).",B:"Operador Laplaciano, que detecta mudanças de intensidade em todas as direções simultaneamente sem distinção.",C:"Filtro de Média, que equaliza o gradiente em todas as direções para remover as bordas do tecido ósseo.",D:"Curva de Cores, que altera a intensidade de brilho do osso sem analisar a vizinhança dos pixels."},c:"A",e:"O Sobel calcula derivadas parciais separadas: Gx (gradiente horizontal) e Gy (gradiente vertical). Fornece informação direcional — saber se a borda é horizontal, vertical ou inclinada é essencial para análise de densidade óssea."},
+  {n:28,ctx:"Ao implementar um filtro de inversão para melhorar a legibilidade de negativos de filmes antigos, um desenvolvedor utiliza a fórmula g(x,y) = 255 - f(x,y). Ele observa que o processamento é extremamente rápido, mesmo em dispositivos de baixo custo.",p:"Avalie a classificação dessa operação dentro da taxonomia de manipulação de imagens e justifique sua eficiência computacional.",o:{A:"É uma Operação Espacial, pois exige a análise de todos os pixels vizinhos para determinar a nova cor.",B:"É uma Operação de Convolução, pois depende de um kernel para deslizar sobre a imagem original.",C:"É uma Operação Pontual, pois o valor do novo pixel depende apenas do valor do original na mesma coordenada exata.",D:"É uma Operação de Extração, pois retira informações de bordas estruturais para criar uma nova imagem."},c:"C",e:"Operação Pontual: para calcular g(x,y) é necessário apenas f(x,y) — zero vizinhos, zero kernel. Cada pixel é processado isoladamente com uma única subtração. Daí a velocidade extrema."},
+  {n:29,ctx:"Um sistema de inspeção automatizada em uma fábrica de semicondutores utiliza o seguinte pipeline: (1) Captura de imagem da peça, (2) Aplicação de Filtro Gaussiano, (3) Aplicação de Filtro Laplaciano, (4) Normalização e Inversão visual para o operador humano.",p:"Analise o objetivo final da quarta etapa (Normalização e Inversão) dentro deste contexto profissional de controle de qualidade.",o:{A:"Remover o ruído remanescente que o filtro Gaussiano não conseguiu eliminar na primeira etapa.",B:"Reduzir a resolução da imagem para que o sistema de IA possa processar os dados mais rapidamente.",C:"Forçar as linhas detectadas a se tornarem pretas sobre um fundo branco absoluto, otimizando a legibilidade humana.",D:"Transformar o filtro de segunda derivada em um filtro de primeira derivada para economizar memória RAM."},c:"C",e:"Após o Laplaciano, bordas aparecem como linhas claras em fundo escuro. A inversão as transforma em linhas pretas sobre fundo branco — muito mais legível para inspeção humana. A normalização garante o range 0-255 correto."},
+  {n:30,ctx:"Imagine que você recebeu uma matriz de pixels de uma imagem 7×7 e precisa calcular manualmente o valor de um novo pixel após uma operação de média local (suavização) com um kernel 3×3 preenchido com 1/9.",p:"Calcule ou estime o valor aproximado do novo pixel central após a aplicação dessa convolução e determine se a imagem resultante será mais nítida ou mais suave.",o:{A:"O valor será aproximadamente 3, e a imagem resultará mais suave (desfocada) devido à média da vizinhança.",B:"O valor será 255, e a imagem resultará em um branco puro devido ao estouro da capacidade do pixel.",C:"O valor será -3, e a imagem resultará em um erro de processamento por valores negativos de intensidade.",D:"O valor será 30, e a imagem resultará em um aumento drástico de contraste e nitidez nas bordas."},c:"A",e:"O kernel 3×3 de médias soma os 9 valores e divide por 9. Com valores baixos na janela, o resultado é pequeno e suavizado — próximo de 3. A média local sempre produz blur (suavização), nunca aumento de contraste."},
+  {n:31,ctx:"Uma startup de edição de fotos para dispositivos móveis está enfrentando problemas de desempenho. Ao aplicar filtros básicos em imagens de 12 megapixels, o sistema realiza aproximadamente 144 trilhões de interações no domínio espacial, o que torna o processo lento e drena a bateria dos aparelhos. O CTO sugere que a equipe abandone a \"força bruta\" e utilize o que chama de \"atalho matemático\" para reduzir a complexidade algorítmica.",p:"Avalie a situação técnica descrita e determine qual mudança de paradigma na Ciência da Computação deve ser adotada para otimizar o tempo de processamento dessas imagens, de acordo com as fontes.",o:{A:"Manter o processamento no domínio espacial, mas reduzir a resolução das fotos para diminuir o número total de pixels.",B:"Migrar do domínio espacial para o domínio da frequência, utilizando a Transformada Rápida de Fourier (FFT).",C:"Implementar um algoritmo de ordenação de pixels O(N²) para organizar as cores antes da aplicação do filtro.",D:"Utilizar exclusivamente filtros de inversão de cores, que por serem operações pontuais, não dependem da vizinhança de pixels."},c:"B",e:"O Teorema da Convolução permite substituir a convolução espacial O(N²) por FFT + multiplicação + FFT inversa com complexidade O(N log N). A redução é astronômica e viabiliza o processamento em tempo real em dispositivos móveis."},
+  {n:32,ctx:"Durante a análise de um sinal visual complexo, um engenheiro de software percebe que a imagem apresenta muitas texturas finas e bordas nítidas que precisam ser preservadas em um processo de compressão. O documento afirma que qualquer sinal complexo pode ser decomposto em \"peças incrivelmente simples\".",p:"Analise a composição matemática das imagens digitais no domínio da frequência e identifique quais elementos são responsáveis pelas características de bordas e detalhes finos mencionados no texto-base.",o:{A:"Ondas de baixa frequência, que se concentram no ponto central e brilhante do espectro de Fourier.",B:"Ondas de alta frequência, que se manifestam como poeira espalhada nas bordas do espectro.",C:"Ondas de fase nula, que representam apenas a iluminação global e as áreas lisas da fotografia.",D:"Ondas de interferência destrutiva, que eliminam o ruído de fundo sem alterar a estrutura da imagem."},c:"B",e:"O centro brilhante do espectro representa baixas frequências (iluminação global). Altas frequências — bordas nítidas, texturas finas — ficam nas extremidades como poeira. São elas que devem ser preservadas na compressão."},
+  {n:33,ctx:"Um sistema de visão computacional para controle de qualidade industrial processa imagens de peças metálicas. O processamento direto pelos pixels esbarra em uma complexidade de O(N²), tornando a inspeção em tempo real inviável na linha de montagem. O Teorema da Convolução é apresentado como uma solução para esse \"pesadelo matemático\".",p:"Considere a aplicação do Teorema da Convolução no domínio da frequência. Qual é a vantagem prática dessa técnica para a eficiência algorítmica do sistema de inspeção?",o:{A:"Substituir cálculos matriciais exaustivos no espaço normal por multiplicações simples ponto a ponto no domínio da frequência.",B:"Eliminar a necessidade de transformar a imagem de volta para o domínio espacial após o processamento.",C:"Transformar a complexidade logarítmica O(N log N) de volta para a complexidade exponencial O(N²).",D:"Garantir que apenas as baixas frequências sejam processadas, ignorando as bordas das peças metálicas."},c:"A",e:"Teorema da Convolução: convolução no espaço = multiplicação no domínio da frequência. FFT(imagem) × FFT(filtro) = FFT(resultado). Troca cálculos matriciais de O(N²) por multiplicações simples elemento a elemento no espectro."},
+  {n:34,ctx:"Uma equipe de restauração digital recebeu fotos antigas digitalizadas por um scanner que introduziu um ruído periódico irritante, visível como uma textura repetitiva sobre as imagens. Ao observar o espectro de Fourier dessas fotos, o especialista nota dois pontos brilhantes isolados e anormais fora do centro.",p:"Avalie a estratégia de intervenção técnica necessária para remover esse ruído específico, seguindo a metodologia apresentada nas fontes.",o:{A:"Aplicar um filtro Gaussiano para borrar toda a imagem, eliminando tanto o ruído quanto os detalhes da foto original.",B:"Utilizar um filtro passa-alta para bloquear o centro do espectro e manter apenas as bordas da textura invasora.",C:"Apagar manualmente os pontos brilhantes isolados no espectro de frequência e aplicar a transformada inversa.",D:"Aumentar a intensidade luminosa da foto original para ofuscar o ruído causado pelo scanner."},c:"C",e:"Ruído periódico = frequências específicas = pontos discretos no espectro. Ao zerá-los (notch filtering) e aplicar a FFT Inversa, a imagem é reconstruída sem o padrão de ruído — cirurgia precisa no espectro."},
+  {n:35,ctx:"No processamento de imagens, a transição entre domínios é descrita como uma \"máquina de teletransporte\" que revela o DNA oculto do arquivo. Para que um filtro de suavização seja aplicado com sucesso e a imagem resultante possa ser visualizada por um ser humano, é necessário seguir uma sequência lógica de operações.",p:"Analise o fluxograma de processamento no domínio da frequência e selecione a alternativa que descreve a \"coreografia\" correta para a aplicação de um filtro.",o:{A:"Aplicar filtro → Transformada de Fourier → Multiplicação → Saída da imagem.",B:"Transformada de Fourier → Multiplicação pelo filtro → Transformada Inversa de Fourier.",C:"Multiplicação → Transformada Inversa de Fourier → Captura da imagem original.",D:"Transformada de Fourier → Redução de pixels → Reconstrução no domínio espacial."},c:"B",e:"Fluxo obrigatório: (1) FFT — converte para domínio da frequência; (2) Multiplica pelo filtro no espectro; (3) FFT Inversa — retorna ao domínio espacial. Sem a transformada inversa o resultado é invisualizável."},
+  {n:36,ctx:"Um algoritmo de reconhecimento facial precisa isolar apenas os contornos dos olhos e da boca de um indivíduo, eliminando variações suaves de iluminação na pele. Para isso, o sistema deve utilizar um filtro que atue diretamente no espectro de frequência.",p:"Com base nas propriedades dos filtros espaciais aplicados na frequência, qual tipo de filtro deve ser escolhido para realizar essa tarefa de destacar apenas as bordas e detalhes?",o:{A:"Filtro passa-baixa, como o Gaussiano, que mantém o centro do espectro aceso e apaga as bordas.",B:"Filtro de inversão, que subtrai os valores de brilho para criar um negativo da imagem original.",C:"Filtro passa-alta, como o Laplaciano, que bloqueia as baixas frequências centrais e deixa passar os detalhes finos.",D:"Filtro de mediana, que calcula a média aritmética dos pontos brilhantes no centro do espectro."},c:"C",e:"Bordas = altas frequências. O filtro passa-alta zera o centro do espectro (iluminação suave da pele) e preserva as extremidades (contornos dos olhos e boca). É o inverso do filtro de suavização."},
+  {n:37,ctx:"O processamento de imagens no domínio da frequência é fundamentado nas descobertas de Joseph Fourier no século XIX. Suas ideias permitem que imagens sejam tratadas não como grades de pontos, mas como fenômenos ondulatórios.",p:"Do ponto de vista interdisciplinar entre Matemática e Computação, como uma imagem digital de duas dimensões é definida após passar pela Transformada de Fourier?",o:{A:"Uma sequência aleatória de bits que armazena o valor exato de cor de cada pixel de forma compacta.",B:"Um sinal complexo composto por uma sobreposição de ondas matemáticas puras de seno e cosseno.",C:"Uma matriz estática de valores de brilho que dependem exclusivamente de seus vizinhos espaciais.",D:"Um quebra-cabeça de pixels físicos onde cada peça representa uma frequência de luz visível."},c:"B",e:"A Transformada de Fourier decompõe a imagem em soma de ondas senoidais e cossenoidais de diferentes frequências, amplitudes e fases. A imagem passa de grade de números para receita de ondas no domínio da frequência."},
+  {n:38,ctx:"Em sistemas de compressão de vídeo em tempo real, cada milissegundo de processamento é valioso. A diferença entre a complexidade O(N²) e O(N log N) determina se um vídeo pode ser transmitido em alta definição ou se haverá travamentos constantes.",p:"Avalie o impacto da adoção da Transformada Rápida de Fourier (FFT) na infraestrutura de servidores de streaming, considerando a redução de cálculos mencionada nas fontes.",o:{A:"A FFT aumenta a carga de processamento ao exigir que o computador calcule trilhões de interações extras.",B:"A FFT permite que cálculos complexos de filtragem se tornem operações aritméticas simples, reduzindo o custo computacional.",C:"A FFT elimina a necessidade de memória RAM, pois o processamento ocorre em uma dimensão matemática invisível.",D:"A FFT transforma imagens coloridas em preto e branco para facilitar o transporte dos dados pela rede."},c:"B",e:"A FFT substitui a convolução O(N²) por O(N log N) total. Para imagens grandes, representa bilhões de operações a menos por frame — viabilizando streaming de vídeo HD em tempo real."},
+  {n:39,ctx:"O espectro de Fourier de uma imagem urbana mostra uma grande concentração de energia no centro e linhas verticais e horizontais bem marcadas que se estendem para as bordas. Essas linhas representam as bordas dos prédios e janelas na foto original.",p:"Se um engenheiro decidir aplicar um filtro que \"apague\" a poeira espalhada nas bordas do espectro, mantendo apenas o ponto central brilhante, qual será o efeito visual na foto da cidade?",o:{A:"A imagem se tornará extremamente nítida, revelando texturas que antes estavam ocultas no domínio espacial.",B:"A imagem ficará mais suave e borrada, perdendo os detalhes finos das janelas e texturas das fachadas.",C:"A imagem terá suas cores invertidas, transformando o dia em noite por meio da manipulação de frequências.",D:"A imagem desaparecerá completamente, pois o ponto central não contém informações sobre as formas gerais."},c:"B",e:"Apagar bordas do espectro (altas frequências) é um filtro passa-baixa. Resultado: apenas variações lentas de cor permanecem. A cidade ficará borrada, sem bordas nítidas, sem texturas — o blur clássico de foto desfocada."},
+  {n:40,ctx:"Um projeto de análise automatizada de grãos de café utiliza o domínio da frequência para limpar imagens digitalizadas. O sucesso do projeto depende de \"traduzir a nossa realidade para uma linguagem matemática secreta\".",p:"Considerando a conclusão da análise apresentada, qual é a \"essência\" do processamento moderno de imagens de acordo com as fontes?",o:{A:"Aumentar a resolução física dos sensores de captura para evitar o uso de filtros matemáticos.",B:"Manipular padrões ocultos em frequências para limpar dados e retornar à realidade com perfeição.",C:"Substituir a matemática de Fourier por redes neurais que operam exclusivamente no domínio espacial.",D:"Priorizar o uso da força bruta computacional em hardware dedicado para manter a simplicidade algorítmica."},c:"B",e:"A essência é o roundtrip: mundo real → FFT → manipulação dos padrões ocultos no espectro → FFT Inversa → imagem mais limpa. Esse ciclo é o núcleo do processamento moderno de sinais e imagens."},
+  {n:41,ctx:"Uma empresa de automação industrial está instalando um sistema de visão computacional para identificar defeitos em peças metálicas que passam por uma esteira. O primeiro passo do sistema deve ser separar a peça (objeto de interesse) do fundo da esteira para que uma análise matemática precisa possa ser realizada. Sem essa etapa, a extração de informações visuais é inviável.",p:"Avalie a situação profissional descrita e identifique o termo técnico que define o processo de subdividir a imagem em regiões de interesse para possibilitar a extração de dados.",o:{A:"Rasterização, que converte vetores geométricos em uma grade numérica de pixels para exibição.",B:"Segmentação, que consiste no processo de subdividir a imagem em suas partes constituintes.",C:"Interpolação, que estima valores de pixels entre pontos conhecidos para aumentar a resolução da imagem.",D:"Tonalização, que aplica modelos de iluminação para simular a reflexão da luz em superfícies 3D."},c:"B",e:"Segmentação é o processo de dividir a imagem em regiões significativas (objeto vs. fundo). Sem ela, é impossível extrair medidas, contar objetos ou classificar peças — primeiro passo obrigatório de qualquer pipeline de visão computacional."},
+  {n:42,ctx:"Durante o desenvolvimento de um software de edição de documentos, um engenheiro precisa implementar uma ferramenta que destaque automaticamente as bordas de assinaturas em papel branco. Para isso, ele decide utilizar o Filtro de Sobel, que busca por descontinuidades drásticas nos valores numéricos dos pixels vizinhos na grade da imagem.",p:"Analise a lógica de funcionamento do filtro escolhido pelo engenheiro e identifique em qual filosofia matemática de processamento ele se baseia.",o:{A:"Filosofia de Similaridade, que busca agrupar pixels que compartilham o mesmo tom de cor ou sombra.",B:"Filosofia de Relevo, que interpreta tons de cinza como informações de elevação em um mapa topográfico.",C:"Filosofia de Dissimilaridade, que foca na detecção de bordas onde o pixel dá um salto abrupto de brilho.",D:"Filosofia de Hidrologia, que simula uma inundação digital para encontrar bacias hidrográficas na imagem."},c:"C",e:"O Sobel opera na Filosofia de Dissimilaridade: procura pixels com transição drástica de intensidade em relação aos vizinhos. Essa mudança abrupta é o sinal de que existe uma borda — fronteira entre regiões distintas."},
+  {n:43,ctx:"Um desenvolvedor de aplicativos para redes sociais está criando um filtro de \"fundo desfocado\" para fotos tiradas em ambientes externos. Ao testar a técnica de Thresholding (limiarização) para isolar o usuário do cenário, ele percebe que partes do rosto da pessoa se fundem com reflexos do sol ao fundo, resultando em uma máscara falha e ruidosa.",p:"Considere as limitações técnicas citadas no texto-base e avalie por que a técnica de limiarização apresentou falhas nesse cenário real.",o:{A:"Porque a limiarização funciona apenas em imagens coloridas, falhando em escalas de cinza.",B:"Porque o mundo físico possui sombras e reflexos que criam pixels de cenário idênticos aos do objeto.",C:"Porque o Filtro de Sobel aplicado antes da limiarização removeu as informações de cor essenciais.",D:"Porque a limiarização exige um pós-processamento pesado que o hardware móvel não consegue executar."},c:"B",e:"O Thresholding decide apenas por brilho. Reflexos do sol criam pixels claros no fundo (iguais ao papel) e sombras no rosto criam pixels escuros (iguais ao objeto). O mundo físico viola a premissa simplificadora da técnica."},
+  {n:44,ctx:"Ao estudar novas formas de ensinar máquinas a \"enxergar\", uma equipe de pesquisa decide abandonar a visão de imagens como planos 2D e passa a interpretá-las como modelos 3D. Nessa nova abordagem, pixels escuros são vistos como vales profundos e pixels claros como picos de cordilheiras.",p:"Analise a descrição geométrica apresentada e identifique o algoritmo de segmentação que utiliza essa analogia topográfica para separar objetos.",o:{A:"Algoritmo de Sobel, que traça linhas de fronteira baseadas na variação de brilho entre vizinhos.",B:"Algoritmo de Thresholding, que aplica um valor de corte fixo para criar máscaras binárias sólidas.",C:"Algoritmo de Watershed, que simula o comportamento de fluidos sobre um relevo digital de tons de cinza.",D:"Algoritmo de Crescimento de Região, que preenche áreas baseando-se estritamente na cor do pixel central."},c:"C",e:"O Watershed usa literalmente a metáfora topográfica: trata a imagem como terreno 3D onde tons de cinza definem altitude, perfura os vales, deixa a água digital subir e constrói barragens onde frentes distintas se encontram."},
+  {n:45,ctx:"O algoritmo Watershed é inspirado na hidrologia. O processo envolve perfurar os vales do mapa topográfico da imagem e permitir que uma \"água digital\" suba, preenchendo as bacias. O ponto crítico ocorre quando as águas vindas de vales diferentes se encontram.",p:"Avalie o funcionamento do Watershed e determine qual ação o sistema deve tomar no exato momento da colisão entre volumes de água de bacias distintas para garantir a segmentação.",o:{A:"Misturar as águas para criar uma zona de transição suave entre os objetos da imagem.",B:"Construir barragens virtuais nas linhas de contato para impedir que as águas se misturem.",C:"Reduzir o nível da água até que ela retorne aos buracos originais nos vales profundos.",D:"Inverter o mapa topográfico, transformando vales em picos para reiniciar a inundação."},c:"B",e:"Princípio fundamental do Watershed: quando duas frentes de água de bacias distintas se encontram, constrói-se uma barreira naquele ponto. Essas barragens formam as linhas de segmentação — fronteiras entre os objetos detectados."},
+  {n:46,ctx:"Uma empresa de diagnóstico médico por imagem está enfrentando dificuldades ao aplicar o algoritmo Watershed em radiografias. Devido a ruídos naturais da captura e texturas rugosas dos tecidos, a imagem acaba sendo dividida em milhares de fragmentos minúsculos e inúteis, dificultando a análise do médico.",p:"Identifique o nome do fenômeno técnico descrito e analise a causa apontada no texto-base para essa falha na segmentação.",o:{A:"Subsegmentação, causada pela falta de contraste entre os tecidos moles e os ossos.",B:"Supersegmentação, causada por micro-poças geradas por flutuações de textura e ruídos.",C:"Rasterização ruidosa, causada pelo excesso de água digital injetada pelo algoritmo nos picos.",D:"Dissimilaridade nula, causada pela aplicação de filtros de suavização que apagam as bordas."},c:"B",e:"Supersegmentação: ruídos e variações de textura criam centenas de vales falsos no mapa topográfico. Cada vale gera sua própria bacia, fragmentando a imagem em pedaços minúsculos e inúteis. É o principal problema do Watershed clássico em imagens ruidosas."},
+  {n:47,ctx:"Um sistema de automação agrícola precisa contar grãos de café em uma foto que apresenta reflexos brancos severos causados pela iluminação do galpão. Para evitar que o ruído dos reflexos quebre a imagem em pedaços inúteis, os engenheiros decidem utilizar uma evolução do Watershed.",p:"Analise as opções tecnológicas e escolha a estratégia que permite controlar a enchente digital, fazendo a água nascer apenas em posições estratégicas pré-determinadas.",o:{A:"Watershed baseado em limiares, que define um corte fixo de brilho para todos os grãos de café.",B:"Watershed baseado em marcadores, que direciona o foco do processamento para as peças grandes.",C:"Detecção de bordas de Sobel, que ignora as texturas internas dos grãos e foca apenas nos contornos.",D:"Segmentação binária simples, que remove os reflexos brancos transformando-os em preto profundo."},c:"B",e:"O Watershed com Marcadores define pontos de partida semânticos explícitos (aqui é grão, aqui é fundo). A inundação parte apenas desses marcadores, evitando a explosão de micro-bacias causadas por reflexos e ruídos."},
+  {n:48,ctx:"Para um computador, uma imagem não é uma representação de rostos ou cenários, mas sim uma \"grade gigantesca de números\". Cada pixel é um valor numérico absoluto que indica um nível de cinza.",p:"Considerando a natureza numérica da imagem digital, avalie qual é o maior desafio prático da visão computacional ao tentar realizar a segmentação.",o:{A:"Converter a grade de números em sinais elétricos que o monitor possa exibir para o usuário.",B:"Reduzir o número de pixels para que o computador não precise processar tantos dados.",C:"Deduzir a existência de objetos físicos a partir de um oceano de números sem significado inerente.",D:"Garantir que todos os números da grade sejam ímpares para facilitar o cálculo do filtro de Sobel."},c:"C",e:"O desafio semântico central: o computador vê apenas uma matriz de números 0-255. Não há peça ou grão nesses números — apenas intensidades. Deduzir estrutura e objetos a partir de valores numéricos sem significado inerente é o desafio fundamental da visão computacional."},
+  {n:49,ctx:"Técnicas baseadas em regiões operam de forma oposta à detecção de bordas. Enquanto uma foca no que é diferente, a outra busca pela harmonia entre os elementos para realizar o agrupamento.",p:"Com base nos conceitos de segmentação, avalie qual critério é fundamental para as técnicas baseadas em regiões.",o:{A:"A busca por pixels que diferem de forma drástica e repentina de seus vizinhos próximos.",B:"O cálculo do gradiente para identificar o exato momento em que o brilho sofre um salto abrupto.",C:"O agrupamento de pixels vizinhos que compartilham a mesma similaridade de cor ou sombra.",D:"A criação de barragens virtuais em pontos onde a textura da imagem apresenta alta frequência."},c:"C",e:"Técnicas baseadas em regiões agrupam pixels por similaridade: pixels vizinhos com cor ou intensidade semelhantes pertencem ao mesmo objeto. É o oposto da detecção de bordas — em vez de buscar diferença, busca-se semelhança."},
+  {n:50,ctx:"O avanço da Inteligência Artificial em visão computacional muitas vezes busca inspiração em leis naturais e eventos biológicos para resolver problemas complexos de engenharia. O sucesso do algoritmo Watershed é um exemplo dessa abordagem interdisciplinar.",p:"Avalie a conclusão apresentada nas fontes sobre a evolução da tecnologia de segmentação e identifique a reflexão central proposta.",o:{A:"O sucesso da IA depende exclusivamente do aumento do poder de processamento bruto do hardware.",B:"A solução para mistérios da computação pode estar na simulação de fenômenos da natureza, como inundações.",C:"Algoritmos matemáticos puros são superiores a modelos biológicos por serem livres de imprecisões.",D:"A visão computacional deve ignorar o mundo físico e focar apenas na manipulação sintética de pixels."},c:"B",e:"A conclusão interdisciplinar: ao observar como a água flui pelo terreno e se divide em bacias hidrográficas, engenheiros criaram um dos algoritmos de segmentação mais elegantes. A natureza, modelada matematicamente, é fonte poderosa de soluções computacionais."}
+];
+
+function iniciar() {
+  const v = document.getElementById('input-nome').value.trim();
+  if (!v) { alert("Digite seu nome para continuar."); return; }
+  nome = v;
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('screen-quiz').style.display = 'block';
+  document.getElementById('tb-nome').textContent = nome;
+  renderizar();
+}
+
+function renderizar() {
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = '';
+  Q.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    let opts = '';
+    Object.entries(q.o).forEach(([l, t]) => {
+      const eSafe = q.e.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ');
+      opts += `<button class="opt" id="o${i}${l}" onclick="responder(${i},'${l}','${q.c}','${eSafe}')"><span class="opt-l">${l})</span><span>${t}</span></button>`;
+    });
+    card.innerHTML = `<div class="q-num">Questão ${q.n}</div><div class="q-ctx">${q.ctx}</div><div class="q-txt">${q.p}</div><div class="options">${opts}</div><div class="explanation" id="exp${i}"><span class="exp-tag"></span><span class="exp-body"></span></div>`;
+    body.appendChild(card);
+  });
+}
+
+function responder(i, sel, cor, expl) {
+  if (answered[i]) return;
+  answered[i] = true;
+  Object.keys(Q[i].o).forEach(l => {
+    const b = document.getElementById('o' + i + l);
+    b.classList.add('locked');
+    if (l === cor) b.classList.add('correct');
+    if (l === sel && l !== cor) b.classList.add('wrong');
+  });
+  const ok = sel === cor;
+  if (ok) acertos++; else erros++;
+  respondidas++;
+  const exp = document.getElementById('exp' + i);
+  exp.classList.add(ok ? 'ok' : 'fail', 'show');
+  exp.querySelector('.exp-tag').textContent = ok ? '✓ Resposta correta' : '✗ Incorreto — A resposta correta é a alternativa ' + cor;
+  exp.querySelector('.exp-body').textContent = expl;
+  atualizarHUD();
+}
+
+function atualizarHUD() {
+  document.getElementById('tb-ac').textContent = '✓ ' + acertos;
+  document.getElementById('tb-err').textContent = '✗ ' + erros;
+  document.getElementById('tb-prog').textContent = respondidas + '/' + TOTAL;
+  document.getElementById('tb-bar').style.width = (respondidas / TOTAL * 100) + '%';
+  if (respondidas === TOTAL) finalizar();
+}
+
+function finalizar() {
+  setTimeout(() => {
+    document.getElementById('screen-quiz').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    const r = document.getElementById('screen-result');
+    r.style.display = 'flex';
+    window.scrollTo(0, 0);
+    const pct = ((acertos / TOTAL) * 100).toFixed(1);
+    document.getElementById('res-pct').textContent = pct + '%';
+    document.getElementById('res-ac').textContent = acertos;
+    salvar();
+  }, 400);
+}
+
+function salvar() {
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: [{ "NOME": nome, "ACERTOS": acertos }] })
+  })
+  .then(r => r.json())
+  .then(() => {
+    document.getElementById('sync-msg').textContent = '✓ Resultado registrado no ranking global.';
+    document.getElementById('sync-msg').style.color = '#22c55e';
+  })
+  .catch(() => {
+    document.getElementById('sync-msg').textContent = '⚠ Não foi possível registrar no ranking.';
+    document.getElementById('sync-msg').style.color = '#ef4444';
+  });
+}
+
+function verRanking(voltando) {
+  ['screen-login','screen-quiz','screen-result'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('topbar').style.display = 'none';
+  document.getElementById('screen-ranking').style.display = 'block';
+  window.scrollTo(0, 0);
+  document.getElementById('btn-voltar').style.display = voltando ? 'inline-block' : 'none';
+  const tbody = document.getElementById('rank-body');
+  tbody.innerHTML = '<tr><td colspan="3" class="rank-loading">Carregando ranking...</td></tr>';
+  fetch(API)
+    .then(r => r.json())
+    .then(dados => {
+      dados.sort((a, b) => b.ACERTOS - a.ACERTOS);
+      const medals = ['🥇','🥈','🥉'];
+      tbody.innerHTML = dados.map((al, i) => {
+        const isMe = al.NOME === nome && nome !== '';
+        const pos = i < 3 ? medals[i] : (i + 1) + 'º';
+        return `<tr class="${isMe ? 'rank-me' : ''}"><td class="rank-pos">${pos}</td><td>${al.NOME}</td><td class="rank-pts">${al.ACERTOS} pts</td></tr>`;
+      }).join('');
+    })
+    .catch(() => {
+      tbody.innerHTML = '<tr><td colspan="3" class="rank-loading" style="color:#ef4444">Erro ao carregar ranking.</td></tr>';
+    });
+}
+
+function fecharRanking() {
+  document.getElementById('screen-ranking').style.display = 'none';
+  if (nome && respondidas < TOTAL) {
+    document.getElementById('topbar').style.display = 'flex';
+    document.getElementById('screen-quiz').style.display = 'block';
+  } else if (!nome) {
+    document.getElementById('screen-login').style.display = 'flex';
+  }
+}
+</script>
 </body>
 </html>
