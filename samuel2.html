@@ -3,53 +3,884 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prova B2 — Treino</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090e;
+  --surface: #0d1017;
+  --surface2: #121720;
+  --surface3: #181f2a;
+  --border: #1c2535;
+  --border2: #243040;
+  --cyan: #00d4ff;
+  --green: #00ff88;
+  --yellow: #ffd000;
+  --red: #ff3d5a;
+  --magenta: #cc44ff;
+  --orange: #ff8c00;
+  --text: #b0c0d0;
+  --text-dim: #4a6070;
+  --text-bright: #e0ecf8;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Orbitron', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,212,255,0.012) 3px, rgba(0,212,255,0.012) 4px);
+  pointer-events: none; z-index: 200;
+}
 
-<title>Nada Aqui</title>
+/* ======= HEADER ======= */
+.hdr {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hdr-title {
+  font-family: var(--font-display);
+  font-size: 11px; letter-spacing: 2px; color: var(--cyan);
+  text-transform: uppercase;
+}
+.hdr-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.pill {
+  font-size: 10px; padding: 3px 10px; border-radius: 2px; font-weight: 600;
+  letter-spacing: 0.8px; text-transform: uppercase;
+}
+.pill-green { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.25); }
+.pill-yellow { background: rgba(255,208,0,0.1); color: var(--yellow); border: 1px solid rgba(255,208,0,0.25); }
+.pill-red { background: rgba(255,61,90,0.1); color: var(--red); border: 1px solid rgba(255,61,90,0.25); }
+.pill-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.25); }
+.pill-dim { background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border); }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+/* progress bar */
+.prog-bar-wrap { position: fixed; top: 47px; left: 0; right: 0; z-index: 100; height: 3px; background: var(--border); }
+.prog-bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); transition: width 0.5s ease; box-shadow: 0 0 10px rgba(0,255,136,0.4); }
 
+/* ======= QUEUE VIZ ======= */
+.queue-viz {
+  position: fixed; top: 50px; right: 0; z-index: 99;
+  display: flex; flex-direction: column; gap: 2px; padding: 12px 8px;
+  max-height: calc(100vh - 60px); overflow-y: auto;
+}
+.qv-dot {
+  width: 8px; height: 8px; border-radius: 1px;
+  background: var(--border); transition: all 0.3s;
+  cursor: default;
+}
+.qv-dot.current { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.qv-dot.mastered { background: var(--green); }
+.qv-dot.s1 { background: var(--yellow); }
+
+/* ======= MAIN ======= */
+.main {
+  padding: 70px 16px 40px;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh;
+}
+
+/* ======= CARD ======= */
+.card {
+  width: 100%; max-width: 760px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  animation: cardIn 0.3s ease;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface2);
+}
+.card-num {
+  font-family: var(--font-display);
+  font-size: 10px; color: var(--cyan); letter-spacing: 1px;
+}
+.card-aula { font-size: 10px; color: var(--text-dim); flex: 1; }
+.streak-dots { display: flex; gap: 4px; }
+.sdot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--border2); }
+.sdot.filled { background: var(--green); border-color: var(--green); box-shadow: 0 0 4px rgba(0,255,136,0.5); }
+
+/* texto-base */
+.tb-wrap { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.tb-toggle {
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--magenta); cursor: pointer; display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px; user-select: none;
+}
+.tb-toggle:hover { color: #e066ff; }
+.tb-arrow { transition: transform 0.2s; display: inline-block; }
+.tb-arrow.closed { transform: rotate(-90deg); }
+.tb-body {
+  font-size: 12px; line-height: 1.85; color: var(--text);
+  padding: 12px 14px;
+  background: rgba(204,68,255,0.04);
+  border: 1px solid rgba(204,68,255,0.1);
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+.tb-body.hidden { display: none; }
+
+/* enunciado */
+.enunc-wrap { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); }
+.enunc-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); margin-bottom: 8px; }
+.enunc-text { font-size: 13px; line-height: 1.75; color: var(--text-bright); font-weight: 500; }
+
+/* alternativas */
+.alts-wrap { padding: 12px 20px 20px; display: flex; flex-direction: column; gap: 8px; }
+.alt-btn {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  background: var(--surface2);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: var(--font-mono);
+  font-size: 12px; line-height: 1.65;
+  color: var(--text);
+  width: 100%;
+}
+.alt-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.04);
+  color: var(--text-bright);
+}
+.alt-btn:disabled { cursor: default; }
+.alt-btn .ltr {
+  font-weight: 700; font-size: 13px;
+  min-width: 20px; color: var(--text-dim);
+  transition: color 0.15s;
+  padding-top: 1px;
+}
+.alt-btn:hover .ltr { color: var(--cyan); }
+
+/* result states */
+.alt-btn.correct {
+  background: rgba(0,255,136,0.08);
+  border-color: rgba(0,255,136,0.4);
+  color: var(--text-bright);
+  animation: correctPulse 0.4s ease;
+}
+.alt-btn.correct .ltr { color: var(--green); }
+@keyframes correctPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+.alt-btn.wrong {
+  background: rgba(255,61,90,0.08);
+  border-color: rgba(255,61,90,0.35);
+  color: rgba(176,192,208,0.5);
+}
+.alt-btn.wrong .ltr { color: var(--red); }
+.alt-btn.other-dim { opacity: 0.4; }
+
+/* ======= RESULT PANEL ======= */
+.result-panel {
+  border-top: 1px solid var(--border);
+  padding: 18px 20px;
+  animation: slideUp 0.35s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.result-banner {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.result-icon {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 800; letter-spacing: 2px;
+}
+.result-correct .result-icon { color: var(--green); text-shadow: 0 0 12px rgba(0,255,136,0.5); }
+.result-wrong .result-icon { color: var(--red); text-shadow: 0 0 12px rgba(255,61,90,0.5); }
+.result-sub { font-size: 10px; color: var(--text-dim); letter-spacing: 0.5px; }
+
+.res-section { margin-bottom: 12px; }
+.res-label {
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.res-label.cyan { color: var(--cyan); }
+.res-label.red { color: var(--red); }
+.res-body {
+  font-size: 12px; line-height: 1.8;
+  border-left: 2px solid rgba(0,212,255,0.3);
+  padding-left: 12px; color: var(--text);
+}
+.err-item {
+  font-size: 11px; padding: 5px 10px; margin-bottom: 5px;
+  background: rgba(255,61,90,0.05);
+  border-left: 2px solid rgba(255,61,90,0.3);
+  color: var(--text-dim); line-height: 1.6;
+}
+.err-item strong { color: var(--red); }
+
+/* next button */
+.next-btn {
+  font-family: var(--font-mono); font-weight: 600;
+  font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 12px 28px;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.35);
+  color: var(--cyan); border-radius: 3px;
+  cursor: pointer; width: 100%; margin-top: 14px;
+  transition: all 0.15s;
+}
+.next-btn:hover { background: rgba(0,212,255,0.15); border-color: var(--cyan); }
+
+/* ======= VICTORY ======= */
+#screenVictory {
+  display: none; min-height: 100vh;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 20px; padding: 40px 20px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.victory-title {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 800; color: var(--green);
+  text-shadow: 0 0 30px rgba(0,255,136,0.5);
+  letter-spacing: 4px;
+}
+.victory-sub { font-size: 13px; color: var(--text-dim); letter-spacing: 1px; }
+.victory-stats {
+  display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  margin: 10px 0;
+}
+.vstat { text-align: center; }
+.vstat-val {
+  font-family: var(--font-display);
+  font-size: 32px; font-weight: 800; color: var(--cyan);
+}
+.vstat-lbl { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+.restart-btn {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px;
+  padding: 12px 32px; border-radius: 3px; cursor: pointer;
+  background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.35);
+  color: var(--cyan); text-transform: uppercase;
+  transition: all 0.15s;
+}
+.restart-btn:hover { background: rgba(0,212,255,0.2); }
+
+/* ======= EMPTY ======= */
+#screenEmpty {
+  display: none; min-height: 60vh;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px; text-align: center;
+}
+.kbd { display: inline-block; padding: 2px 7px; border: 1px solid var(--border2); border-radius: 2px; font-size: 10px; color: var(--text-dim); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+</style>
 </head>
-
 <body>
 
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-    <div class="logo">
-        📘 Estudos
-    </div>
-
-    <h2>Provas</h2>
-
-    <div class="menu">
-        <a href="index.html"> Pagina inicial</a>
-        <a href="rodrigo.html">Prova 28/05 - Rodrigo</a>
-        <a href="samuel1.html">Prova 28/05 - Samuel</a>
-        <a href="eduardo.html">Prova 01/06 - Eduardo</a>
-        <a href="samuel2.html">Prova 02/06 - Samuel</a>
-        <a href="regina.html">Prova 03/06 - Regina</a>
-        <a href="materiadorodrigo"> Materia do rodrigo </a>
-    </div>
-
+<div class="hdr">
+  <div class="hdr-title">B2 <span style="color:var(--text-dim)">/ TREINO</span></div>
+  <div class="hdr-right">
+    <span class="pill pill-green" id="statMastered">0 dominadas</span>
+    <span class="pill pill-yellow" id="statQueue">24 na fila</span>
+    <span class="pill pill-dim" id="statAttempts">0 tentativas</span>
+    <button class="pill pill-dim" onclick="resetGame()" style="cursor:pointer;border:1px solid var(--border);background:transparent">↺ Reiniciar</button>
+  </div>
 </div>
-
-<!-- MAIN -->
+<div class="prog-bar-wrap"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+<div class="queue-viz" id="queueViz"></div>
 
 <div class="main">
-
-    <div class="header">
-
-        <h1>🚧 Nada aqui ainda 🚧</h1>
-
-        <p>
-            Essa prova ainda não foi adicionada.
-        </p>
-
+  <div id="screenQuiz"></div>
+  <div id="screenVictory">
+    <div style="font-size:40px">⚡</div>
+    <div class="victory-title">DOMINADO</div>
+    <div class="victory-sub">todas as questões concluídas</div>
+    <div class="victory-stats">
+      <div class="vstat">
+        <div class="vstat-val" id="vTotal">0</div>
+        <div class="vstat-lbl">tentativas</div>
+      </div>
+      <div class="vstat">
+        <div class="vstat-val" id="vCorrect">0</div>
+        <div class="vstat-lbl">acertos</div>
+      </div>
+      <div class="vstat">
+        <div class="vstat-val" id="vAcc">0%</div>
+        <div class="vstat-lbl">precisão</div>
+      </div>
     </div>
-
+    <button class="restart-btn" onclick="resetGame()">Jogar novamente</button>
+  </div>
 </div>
 
+<script>
+const questoes = [
+  {id:1,set:1,aula:"Arq. Distribuída — Aula 1: Princípios",
+  textoBase:"Uma empresa de comércio eletrônico percebeu que seu sistema centralizado começa a falhar em períodos de grande demanda, como na Black Friday. Para reduzir interrupções, a equipe técnica decidiu distribuir as funções do sistema em vários servidores conectados em rede. A meta é que, mesmo que um servidor pare de funcionar, o usuário continue percebendo a plataforma como um único sistema disponível.",
+  enunciado:"Considerando os princípios de arquitetura distribuída, a decisão da equipe é mais adequada porque prioriza:",
+  alts:{A:"transparência e tolerância a falhas, aumentando disponibilidade do serviço",B:"execução sequencial centralizada, reduzindo a complexidade do software",C:"uso exclusivo de memória compartilhada, eliminando a comunicação em rede",D:"dependência de um único coordenador fixo, simplificando a escalabilidade"},
+  correta:"A",
+  resolucao:"O texto descreve tolerância a falhas (sistema continua quando um servidor falha) e transparência (usuário percebe uma única plataforma). Ambos são conceitos centrais da arquitetura distribuída.",
+  erros:{B:"A proposta não é manter execução centralizada, mas distribuir para ganhar robustez.",C:"Sistemas distribuídos não dependem de memória compartilhada global; a rede continua essencial.",D:"Um único coordenador fixo cria ponto único de falha, contrariando o objetivo."},
+  bloom:"Analisar"},
+
+  {id:2,set:1,aula:"Arq. Distribuída — Aula 2: Nomeação",
+  textoBase:"Uma instituição financeira reorganizou seus serviços digitais e passou a usar nomes como pagamentos.banco.com.br e clientes.banco.com.br para localizar módulos diferentes do sistema. Mesmo que o endereço IP de um desses serviços mude por manutenção ou troca de servidor, os usuários continuam acessando o serviço pelo mesmo nome.",
+  enunciado:"Ao analisar esse cenário, conclui-se corretamente que o principal papel da nomeação em sistemas distribuídos é:",
+  alts:{A:"substituir completamente os endereços físicos por números de porta",B:"garantir que o nome e o endereço sejam sempre a mesma informação",C:"separar identidade lógica e localização, facilitando acesso aos recursos",D:"impedir que serviços mudem de servidor para manter estabilidade da rede"},
+  correta:"C",
+  resolucao:"O serviço pode mudar de IP, mas continua sendo acessado pelo mesmo nome. Isso demonstra que o nome identifica logicamente o recurso (identidade), enquanto o endereço indica onde ele está (localização). A separação entre esses dois conceitos é fundamental.",
+  erros:{A:"Nomeação não substitui tudo por portas; portas cumprem outro papel.",B:"O ponto central é justamente que nome e endereço são coisas diferentes.",D:"Sistemas de nomeação permitem mudar o recurso de lugar sem quebrar o acesso lógico."},
+  bloom:"Aplicar"},
+
+  {id:3,set:1,aula:"Arq. Distribuída — Aula 3: Sincronização",
+  textoBase:"Dois servidores de uma plataforma de reservas registraram operações quase no mesmo instante. Em um deles, a reserva A apareceu como realizada às 11h03. No outro, a reserva B apareceu às 11h01, embora tenha ocorrido depois. O problema aconteceu porque os relógios físicos das máquinas estavam desalinhados. A equipe decidiu adotar um mecanismo que prioriza a ordem causal dos eventos, mesmo sem depender totalmente da hora real.",
+  enunciado:"Nesse cenário, a solução mais adequada para ordenar logicamente os eventos é usar:",
+  alts:{A:"relógios lógicos de Lamport, para representar a relação de causalidade",B:"memória cache local, para reduzir a latência entre as reservas",C:"replicação síncrona de discos, para igualar os horários dos servidores",D:"escalonamento Round Robin, para alternar a execução dos processos"},
+  correta:"A",
+  resolucao:"O problema não é 'que horas são', mas qual evento aconteceu antes. Quando relógios físicos não bastam, os relógios lógicos de Lamport permitem ordenar eventos com base na relação de causalidade.",
+  erros:{B:"Cache melhora desempenho, mas não resolve ordenação lógica de eventos.",C:"Replicação de disco não corrige o problema conceitual de causalidade.",D:"Round Robin é algoritmo de escalonamento, não de sincronização temporal."},
+  bloom:"Analisar"},
+
+  {id:4,set:1,aula:"Arq. Distribuída — Aula 4: Programação Distribuída",
+  textoBase:"Uma empresa de monitoramento criou uma solução em que sensores enviam eventos para um serviço central. Quando um valor sai da faixa esperada, outro serviço dispara notificações para a equipe técnica. Para facilitar a evolução do sistema, os desenvolvedores decidiram separar coleta, processamento e notificação em serviços independentes, capazes de reagir a eventos em tempo real.",
+  enunciado:"Considerando esse caso, a abordagem de programação que melhor descreve a solução adotada é:",
+  alts:{A:"programação orientada a eventos, com componentes reagindo a ocorrências do sistema",B:"programação sequencial monolítica, com todas as funções dentro de um único processo",C:"programação baseada em memória compartilhada, eliminando a troca de mensagens",D:"programação exclusivamente local, sem dependência de serviços em rede"},
+  correta:"A",
+  resolucao:"O texto descreve sensores emitindo eventos, serviços independentes e reações automáticas quando algo acontece — características claras da programação orientada a eventos.",
+  erros:{B:"A solução foi dividida em serviços independentes, não concentrada em um único processo.",C:"Em ambientes distribuídos a comunicação ocorre por mensagens/eventos, não por memória compartilhada global.",D:"O caso depende de sensores, serviços e notificações em rede."},
+  bloom:"Aplicar"},
+
+  {id:5,set:1,aula:"Tópicos Avançados — Aula 1: Avaliação de Desempenho",
+  textoBase:"Uma equipe executou a mesma aplicação científica em versões sequencial e paralela. Na versão sequencial, o programa levou 100 segundos. Na paralela, usando 4 processadores, levou 40 segundos. O gerente afirmou que o sistema já está com aproveitamento total dos processadores e que não há espaço para melhorar.",
+  enunciado:"Ao avaliar o desempenho com base em speedup e eficiência, a conclusão correta é:",
+  alts:{A:"o speedup foi 2,5 e a eficiência foi 62,5%, indicando que ainda há perdas",B:"o speedup foi 4,0 e a eficiência foi 100%, indicando uso ideal dos recursos",C:"o speedup foi 60 e a eficiência foi 25%, indicando baixa latência da rede",D:"o speedup foi 40 e a eficiência foi 2,5%, indicando excesso de paralelismo"},
+  correta:"A",
+  resolucao:"Speedup: S = T(1)/T(p) = 100/40 = 2,5. Eficiência: E = S/p = 2,5/4 = 62,5%. O sistema melhorou, mas não atingiu desempenho ideal — ainda há perdas por sobrecarga ou partes não paralelizáveis.",
+  erros:{B:"Speedup 4 e eficiência 100% só aconteceriam se o tempo caísse de 100 para 25 segundos.",C:"Os valores não correspondem às fórmulas de speedup e eficiência.",D:"Também usa números incompatíveis com o caso."},
+  bloom:"Aplicar/Analisar"},
+
+  {id:6,set:1,aula:"Tópicos Avançados — Aula 2: Computação em Nuvem",
+  textoBase:"Uma startup lançou um aplicativo que tem picos bruscos de uso em horários imprevisíveis. Para evitar custos altos com servidores ociosos, ela escolheu uma solução em que o código é executado apenas quando uma função é acionada, sem a necessidade de manter máquinas dedicadas permanentemente ligadas. A equipe também integrou pipeline automático de testes e entrega.",
+  enunciado:"A solução principal adotada pela startup para lidar com variação de carga e otimizar custos foi:",
+  alts:{A:"computação serverless, com execução sob demanda das funções",B:"uso obrigatório de clusters físicos locais, com capacidade fixa dedicada",C:"substituição de CI/CD por administração manual de infraestrutura",D:"adoção de memória compartilhada global entre todos os usuários do aplicativo"},
+  correta:"A",
+  resolucao:"Picos imprevisíveis + evitar servidores ociosos + execução apenas quando acionada = modelo serverless, típico de nuvem avançada.",
+  erros:{B:"Capacidade fixa dedicada aumenta custo ocioso — o oposto do objetivo.",C:"CI/CD ajuda automação; não faz sentido substituí-lo nesse contexto.",D:"Memória compartilhada global não descreve o modelo de nuvem citado."},
+  bloom:"Avaliar"},
+
+  {id:7,set:1,aula:"Tópicos Avançados — Aula 3: HPC",
+  textoBase:"Um laboratório universitário precisa executar simulações climáticas complexas, com grande volume de dados e intensa troca de informação entre nós de processamento. A equipe está comparando tecnologias de interconexão para reduzir gargalos de comunicação em um cluster de alto desempenho. Entre as opções, busca uma solução projetada para baixa latência e alta taxa de transferência.",
+  enunciado:"Para esse cenário de HPC, a escolha mais adequada de interconexão é:",
+  alts:{A:"rede doméstica WiFi, por ser mais barata e simples de instalar",B:"InfiniBand, por oferecer baixa latência e alta largura de banda",C:"barramento USB compartilhado, por facilitar o acesso simultâneo entre nós",D:"armazenamento em nuvem pública, por substituir a comunicação do cluster"},
+  correta:"B",
+  resolucao:"Em HPC, a comunicação entre nós é crítica. O texto pede baixa latência e alta largura de banda em cluster — esses são exatamente os diferenciais do InfiniBand.",
+  erros:{A:"WiFi não atende ao nível de desempenho exigido por HPC.",C:"USB não é tecnologia de interconexão apropriada para clusters HPC.",D:"Armazenamento em nuvem não substitui a rede de comunicação entre nós."},
+  bloom:"Aplicar/Avaliar"},
+
+  {id:8,set:1,aula:"Tópicos Avançados — Aula 4: Tolerância a Falhas",
+  textoBase:"Uma plataforma de streaming não pode interromper o serviço quando um servidor falha. Para isso, a equipe técnica mantém cópias redundantes dos serviços e monitora indicadores como tempo médio entre falhas e tempo médio de reparo. Em uma reunião, discutiu-se que certos tipos de falha são mais graves, pois um componente pode continuar ativo, mas produzir respostas incorretas e enganosas.",
+  enunciado:"O tipo de falha mais compatível com essa situação é a:",
+  alts:{A:"falha de crash, em que o componente apenas para de responder",B:"falha bizantina, em que o componente continua ativo com comportamento incorreto",C:"falha de omissão, em que todas as mensagens são sempre entregues corretamente",D:"falha de temporização, em que o sistema nunca ultrapassa limites de tempo definidos"},
+  correta:"B",
+  resolucao:"O componente continua ativo mas gera respostas incorretas ou enganosas — esse é o caso clássico da falha bizantina.",
+  erros:{A:"Crash significa parar de funcionar, não continuar operando de forma enganosa.",C:"Falha por omissão está ligada à ausência de respostas, não à entrega correta.",D:"Falha de temporização ocorre quando respostas chegam fora do tempo, não com conteúdo enganoso."},
+  bloom:"Analisar"},
+
+  {id:9,set:2,aula:"Arq. Distribuída — Aula 1: Princípios",
+  textoBase:"Uma rede de clínicas médicas decidiu substituir um sistema único, instalado apenas na sede, por uma solução em que várias unidades registram consultas, exames e prontuários em servidores diferentes. O objetivo é permitir acesso rápido em qualquer filial e continuar atendendo mesmo se uma unidade tiver falha local de infraestrutura. Para o paciente e para o atendente, o sistema deve parecer único.",
+  enunciado:"Ao analisar essa decisão, a principal vantagem buscada pela rede de clínicas é:",
+  alts:{A:"reduzir o número de computadores, concentrando todo o processamento em uma única máquina",B:"manter transparência e disponibilidade, mesmo com distribuição dos componentes",C:"eliminar completamente atrasos de rede, já que todos os dados ficam centralizados",D:"garantir que todos os módulos executem sempre a mesma instrução ao mesmo tempo"},
+  correta:"B",
+  resolucao:"O sistema será distribuído em várias unidades, deve continuar funcionando mesmo com falha local e o usuário deve enxergar tudo como um sistema único — disponibilidade, tolerância a falhas e transparência.",
+  erros:{A:"O caso fala em distribuir, não concentrar.",C:"Sistemas distribuídos não eliminam atrasos de rede; precisam lidar com eles.",D:"Isso se aproxima de processamento SIMD, não do princípio central de sistemas distribuídos."},
+  bloom:"Analisar"},
+
+  {id:10,set:2,aula:"Arq. Distribuída — Aula 2: Nomeação",
+  textoBase:"Uma universidade criou um novo portal acadêmico. O endereço biblioteca.universidade.br continua o mesmo para alunos e professores, mas o serviço foi migrado para outro datacenter durante as férias. A equipe de TI informou que a troca foi possível sem exigir mudança no modo como os usuários acessam o serviço.",
+  enunciado:"No contexto de nomeação em sistemas distribuídos, esse caso mostra que:",
+  alts:{A:"o nome do serviço pode permanecer estável, mesmo que o endereço mude",B:"o endereço IP deve sempre ser igual ao nome lógico do serviço",C:"a mudança de servidor só funciona quando não existe resolução de nomes",D:"o nome é menos importante que o hardware, pois ambos exercem a mesma função"},
+  correta:"A",
+  resolucao:"O nome biblioteca.universidade.br ficou igual, mas o local físico/endereço mudou. A nomeação separa identidade lógica do recurso da sua localização atual.",
+  erros:{B:"Nome lógico e endereço IP não são a mesma coisa.",C:"A resolução de nomes é justamente o mecanismo que permite essa flexibilidade.",D:"Hardware e nome não exercem a mesma função no sistema."},
+  bloom:"Aplicar"},
+
+  {id:11,set:2,aula:"Arq. Distribuída — Aula 3: Sincronização",
+  textoBase:"Uma empresa de logística usa servidores em cidades diferentes para registrar entregas. Em uma auditoria, a equipe percebeu que um pacote apareceu como 'entregue' antes mesmo de 'sair para entrega', por causa de diferenças de horário entre os servidores. Para evitar esse tipo de inconsistência, os analistas decidiram adotar um método que prioriza a ordem dos eventos, mesmo quando os relógios físicos não são perfeitamente confiáveis.",
+  enunciado:"A solução mais adequada para esse problema é usar:",
+  alts:{A:"relógios lógicos, para representar a ordem causal entre eventos",B:"memória cache compartilhada, para igualar o tempo entre os servidores",C:"compactação de arquivos, para reduzir o volume de registros da auditoria",D:"escalonamento FCFS, para decidir qual processo escreve primeiro no disco"},
+  correta:"A",
+  resolucao:"O problema não é horário exato, mas ordem dos eventos. Quando relógios físicos podem divergir, relógios lógicos preservam a relação de causalidade entre os eventos distribuídos.",
+  erros:{B:"Cache melhora acesso a dados, não resolve causalidade temporal.",C:"Compactação não tem relação com sincronização dos eventos.",D:"FCFS é política de escalonamento, não mecanismo de ordenação lógica distribuída."},
+  bloom:"Aplicar/Analisar"},
+
+  {id:12,set:2,aula:"Arq. Distribuída — Aula 4: Programação Distribuída",
+  textoBase:"Uma empresa de segurança eletrônica desenvolveu um sistema com três partes: um serviço coleta sinais de sensores, outro analisa possíveis alertas e um terceiro envia mensagens para a equipe de plantão. Quando um sensor detecta movimento, o evento é repassado automaticamente para os outros módulos, sem necessidade de um operador intermediar o fluxo.",
+  enunciado:"Ao considerar esse caso, a abordagem de programação mais coerente é:",
+  alts:{A:"programação orientada a eventos, com reação automática a ocorrências do sistema",B:"programação estritamente sequencial, com todas as decisões em um único bloco de código",C:"programação baseada apenas em arquivos locais, sem comunicação entre módulos",D:"programação focada em registradores da CPU, sem uso de serviços independentes"},
+  correta:"A",
+  resolucao:"Vários módulos separados, eventos disparando ações automaticamente, comportamento reativo — tudo característico de programação orientada a eventos em ambientes distribuídos.",
+  erros:{B:"O sistema foi dividido em partes que reagem a eventos, não em um único fluxo sequencial.",C:"Há comunicação clara entre módulos.",D:"O problema é de arquitetura de software distribuído, não de programação de baixo nível."},
+  bloom:"Aplicar"},
+
+  {id:13,set:2,aula:"Tópicos Avançados — Aula 1: Avaliação de Desempenho",
+  textoBase:"Uma equipe comparou duas versões de um sistema de análise de dados. A versão antiga processava 500 requisições por minuto com tempo médio de resposta de 2 segundos. Após uma mudança de arquitetura, o sistema passou a processar 900 requisições por minuto, mas o tempo médio de resposta subiu para 3 segundos em horários de pico. O gerente afirmou que o novo sistema é melhor em todos os aspectos, porque a taxa de processamento aumentou.",
+  enunciado:"Ao avaliar o caso, a conclusão mais adequada é:",
+  alts:{A:"o sistema melhorou apenas em throughput, mas piorou em latência",B:"o sistema melhorou igualmente em throughput e tempo de resposta",C:"o sistema piorou em throughput e eficiência ao mesmo tempo",D:"o sistema ficou equivalente ao anterior, porque as métricas se anulam"},
+  correta:"A",
+  resolucao:"Throughput: 500 → 900 req/min (melhorou). Tempo de resposta: 2s → 3s (piorou = mais latência). O gerente estava errado — houve melhora em uma métrica e piora em outra.",
+  erros:{B:"O tempo de resposta aumentou, então não houve melhora nos dois critérios.",C:"O throughput não piorou; ele melhorou.",D:"As métricas não se anulam; mostram ganhos e perdas diferentes."},
+  bloom:"Analisar/Avaliar"},
+
+  {id:14,set:2,aula:"Tópicos Avançados — Aula 2: Computação em Nuvem",
+  textoBase:"Uma empresa de educação on-line passou a usar serviços em nuvem de dois provedores diferentes. Parte do sistema permanece em datacenter próprio por exigência regulatória, enquanto outra parte roda em nuvem pública para aproveitar elasticidade e serviços gerenciados. A equipe técnica quer manter integração entre esses ambientes sem depender de um único fornecedor.",
+  enunciado:"O cenário descrito corresponde principalmente a uma estratégia de:",
+  alts:{A:"nuvem híbrida com elementos de multicloud",B:"processamento totalmente local sem integração externa",C:"computação sequencial com armazenamento central único",D:"virtualização exclusiva de desktop, sem impacto na infraestrutura"},
+  correta:"A",
+  resolucao:"Parte em datacenter próprio + parte em nuvem pública = nuvem híbrida. Uso de mais de um provedor = elemento multicloud. A combinação dos dois conceitos caracteriza a alternativa A.",
+  erros:{B:"Há integração clara com nuvem pública.",C:"O cenário não trata de computação sequencial nem armazenamento central único.",D:"O caso envolve arquitetura de infraestrutura em nuvem, não virtualização de desktop."},
+  bloom:"Aplicar/Analisar"},
+
+  {id:15,set:2,aula:"Tópicos Avançados — Aula 3: HPC",
+  textoBase:"Uma equipe de pesquisa em biotecnologia precisa executar milhares de simulações para estudar interações moleculares. O processamento exige grande capacidade computacional, uso intensivo de comunicação entre processos e gerenciamento de filas de execução para diferentes usuários do laboratório. A equipe decidiu adotar ferramentas específicas para execução paralela e controle de jobs no cluster.",
+  enunciado:"Ao considerar o ambiente descrito, a combinação mais compatível com HPC é:",
+  alts:{A:"MPI para comunicação paralela e SLURM para gerenciamento de jobs",B:"DNS para paralelismo e SMTP para escalonamento de tarefas",C:"HTML para distribuição do processamento e FTP para coordenação do cluster",D:"Bluetooth para interconexão principal e planilhas para controle de execução"},
+  correta:"A",
+  resolucao:"HPC requer: comunicação entre processos paralelos → MPI; gerenciamento de filas e execução de jobs → SLURM. Essa é a combinação padrão em ambientes de alto desempenho.",
+  erros:{B:"DNS e SMTP não são ferramentas de HPC para esse objetivo.",C:"HTML e FTP não resolvem comunicação paralela e escalonamento de jobs.",D:"Bluetooth e planilhas não são soluções adequadas para cluster HPC."},
+  bloom:"Aplicar"},
+
+  {id:16,set:2,aula:"Tópicos Avançados — Aula 4: Tolerância a Falhas",
+  textoBase:"Uma plataforma de telemedicina precisa funcionar continuamente. Para isso, os engenheiros implementaram replicação de serviços e acompanharam dois indicadores: o MTBF (tempo médio entre falhas) e o MTTR (tempo médio de reparo). Após melhorias no plano de recuperação, o MTTR caiu bastante, embora o hardware continue falhando na mesma frequência.",
+  enunciado:"Com base nesse cenário, a principal consequência da redução do MTTR é:",
+  alts:{A:"aumento da disponibilidade do sistema, mesmo sem alterar a frequência das falhas",B:"eliminação total das falhas, pois o tempo de recuperação foi reduzido",C:"aumento automático do MTBF, porque ambos os indicadores sempre crescem juntos",D:"substituição da replicação por execução sequencial mais simples e mais segura"},
+  correta:"A",
+  resolucao:"Se o MTTR cai, o sistema volta mais rápido quando falha. Isso melhora a disponibilidade, mesmo que a frequência de falhas (MTBF) não mude.",
+  erros:{B:"Recuperar mais rápido não elimina totalmente as falhas.",C:"Reduzir MTTR não significa aumentar automaticamente o MTBF.",D:"O caso reforça tolerância a falhas, não retorno a execução sequencial."},
+  bloom:"Analisar"},
+
+  {id:17,set:3,aula:"Arq. Distribuída — Aula 1: Princípios",
+  textoBase:"Uma prefeitura implantou um sistema integrado para acompanhar semáforos, câmeras e sensores de trânsito em vários bairros. Cada região da cidade possui servidores próprios para registrar os dados locais, mas os operadores do centro de controle visualizam tudo em uma única tela, como se fosse um único sistema. A decisão foi tomada porque o volume de dados cresceu e a administração precisava reduzir o risco de parada total do serviço.",
+  enunciado:"Ao analisar a decisão da prefeitura, a principal justificativa técnica para adotar arquitetura distribuída foi:",
+  alts:{A:"concentrar todos os dados em um único computador para facilitar manutenção",B:"aumentar escalabilidade e disponibilidade sem perder a visão unificada do sistema",C:"eliminar completamente a necessidade de comunicação em rede entre os módulos",D:"garantir que todos os servidores executem sempre a mesma tarefa ao mesmo tempo"},
+  correta:"B",
+  resolucao:"O sistema foi espalhado por várias regiões (escalabilidade), deve evitar parada total (disponibilidade) e o operador ainda vê tudo como um sistema único (transparência). Todos apontam para a alternativa B.",
+  erros:{A:"O caso descreve distribuição, não concentração em uma única máquina.",C:"Sistemas distribuídos dependem justamente de comunicação em rede.",D:"Isso se aproxima de paralelismo de dados, não do princípio central do sistema distribuído descrito."},
+  bloom:"Analisar"},
+
+  {id:18,set:3,aula:"Arq. Distribuída — Aula 2: Nomeação",
+  textoBase:"Uma empresa de entregas criou um identificador único para cada pedido logo no momento da compra. Mesmo que o pedido mude de centro de distribuição, de rota ou de veículo durante o transporte, esse identificador continua sendo o mesmo até a conclusão da entrega. Já o endereço do servidor que armazena os dados do pedido pode mudar ao longo do processo, sem alterar a identificação do pacote.",
+  enunciado:"Considerando os conceitos de nomeação em sistemas distribuídos, o elemento mais importante para garantir o rastreamento correto desse pedido ao longo de todo o processo é o uso de:",
+  alts:{A:"um identificador único e estável para representar o pedido",B:"um endereço IP fixo para impedir mudanças de infraestrutura",C:"um nome amigável alterável para facilitar marketing da empresa",D:"um caminho de rede temporário que mude a cada etapa logística"},
+  correta:"A",
+  resolucao:"O pedido muda de local e de infraestrutura, mas deve continuar sendo o mesmo pedido. Em sistemas distribuídos, o identificador único (não dependente de localização) é quem cumpre esse papel de identidade.",
+  erros:{B:"IP fixo não é a melhor forma de representar identidade lógica do pedido.",C:"Nome amigável pode mudar e não garante unicidade forte.",D:"Um caminho temporário não representa identidade estável."},
+  bloom:"Aplicar"},
+
+  {id:19,set:3,aula:"Arq. Distribuída — Aula 3: Sincronização",
+  textoBase:"Uma rede de laboratórios de pesquisa, isolada da internet por razões de segurança, precisa manter os registros de experimentos com horários próximos entre si. Como não é possível consultar um servidor externo de tempo, um dos computadores da rede foi configurado para coletar periodicamente os horários das demais máquinas, calcular um valor médio e enviar ajustes para todos os nós.",
+  enunciado:"A estratégia adotada pela equipe é mais compatível com o uso do:",
+  alts:{A:"algoritmo de Lamport, porque ele sincroniza relógios físicos com tempo real",B:"algoritmo de Berkeley, porque ajusta relógios internos a partir de uma média local",C:"relógio de vetor, porque substitui a necessidade de qualquer sincronização física",D:"algoritmo de Bully, porque elege o maior relógio como horário oficial da rede"},
+  correta:"B",
+  resolucao:"A rede está isolada da internet, sem servidor externo de tempo. Um nó coleta horários e calcula uma média — esse é exatamente o funcionamento do algoritmo de Berkeley.",
+  erros:{A:"Lamport trata de ordenação lógica de eventos, não de ajuste de relógios físicos reais.",C:"Relógios de vetor ajudam na causalidade, mas não substituem sincronização física.",D:"Algoritmo de Bully é de eleição de líder, não de sincronização de tempo."},
+  bloom:"Aplicar/Analisar"},
+
+  {id:20,set:3,aula:"Arq. Distribuída — Aula 4: Programação Distribuída",
+  textoBase:"Uma rede varejista decidiu modernizar seu sistema de vendas. O módulo de estoque, o módulo de pagamentos e o módulo de emissão de notas foram separados em serviços independentes, cada um com interface própria e possibilidade de atualização sem interromper os demais. A meta era facilitar integração com parceiros externos e permitir evolução gradual do sistema.",
+  enunciado:"Nesse caso, a abordagem de desenvolvimento mais coerente com a decisão da empresa é:",
+  alts:{A:"arquitetura orientada a serviços, com módulos desacoplados e integração por interfaces",B:"programa monolítico centralizado, com todo o código em um único bloco principal",C:"processamento vetorial, com a mesma instrução aplicada a vários dados ao mesmo tempo",D:"escalonamento por prioridade, com foco exclusivo na gestão do processador local"},
+  correta:"A",
+  resolucao:"Separação em módulos independentes + comunicação por interfaces + facilidade de integração com outros sistemas + evolução sem interromper tudo = arquitetura orientada a serviços (SOA).",
+  erros:{B:"O sistema foi dividido, não concentrado em um monólito.",C:"Processamento vetorial pertence a paralelismo de dados, não a integração de serviços.",D:"Escalonamento por prioridade é tema de gerenciamento de processos, não de arquitetura distribuída."},
+  bloom:"Analisar"},
+
+  {id:21,set:3,aula:"Tópicos Avançados — Aula 1: Avaliação de Desempenho",
+  textoBase:"Uma equipe executou um algoritmo científico em um cluster com 8 nós. No primeiro experimento, manteve o tamanho do problema fixo e apenas aumentou o número de nós. No segundo experimento, aumentou proporcionalmente o tamanho do problema à medida que aumentava a quantidade de nós. Os analistas observaram que, no segundo caso, o sistema manteve melhor aproveitamento dos recursos.",
+  enunciado:"Ao considerar os dois experimentos, a interpretação mais adequada é que o segundo caso está mais associado à:",
+  alts:{A:"escalabilidade fraca, porque o tamanho do problema cresce junto com os recursos",B:"escalabilidade forte, porque o problema fica constante em todos os testes",C:"latência zero, porque o cluster cresce sem custo de comunicação",D:"eficiência nula, porque aumentar o problema sempre reduz o desempenho total"},
+  correta:"A",
+  resolucao:"Escalabilidade forte: tamanho do problema fixo (1º experimento). Escalabilidade fraca: tamanho do problema cresce com os recursos (2º experimento). O segundo caso = escalabilidade fraca.",
+  erros:{B:"Escalabilidade forte trabalha com problema fixo — o que foi o 1º experimento, não o 2º.",C:"Nenhum sistema real tem latência zero.",D:"Aumentar o problema não implica necessariamente eficiência nula."},
+  bloom:"Analisar"},
+
+  {id:22,set:3,aula:"Tópicos Avançados — Aula 2: Computação em Nuvem",
+  textoBase:"Uma empresa de tecnologia quer padronizar a criação de ambientes em nuvem para desenvolvimento, teste e produção. Para evitar erros manuais, a equipe decidiu descrever redes, máquinas virtuais, permissões e serviços em arquivos versionados, que podem ser reaplicados automaticamente sempre que necessário. Assim, novos ambientes podem ser criados com o mesmo padrão em diferentes momentos.",
+  enunciado:"A prática adotada pela empresa é melhor representada por:",
+  alts:{A:"infraestrutura como código, com automação e versionamento da infraestrutura",B:"escalonamento de CPU por prioridade, com foco em aumentar o clock dos servidores",C:"virtualização de processos, com substituição do sistema operacional por threads",D:"cache distribuído, com armazenamento de dados temporários entre aplicações"},
+  correta:"A",
+  resolucao:"Infraestrutura descrita em arquivos versionados + reaplicados automaticamente + objetivo de padronizar ambientes = Infraestrutura como Código (IaC).",
+  erros:{B:"A questão não trata de escalonamento nem de clock de CPU.",C:"Virtualização de processos não descreve provisionamento automatizado de infraestrutura.",D:"Cache distribuído trata de desempenho de dados, não de criação repetível de ambientes."},
+  bloom:"Aplicar"},
+
+  {id:23,set:3,aula:"Tópicos Avançados — Aula 3: HPC",
+  textoBase:"Um grupo de engenharia está desenvolvendo uma simulação numérica para análise estrutural. O programa precisa executar milhares de operações semelhantes sobre grandes matrizes. Após testes iniciais, a equipe concluiu que grande parte do ganho pode vir do uso de aceleradores especializados para processamento massivo de dados em paralelo, principalmente em operações vetoriais.",
+  enunciado:"Nesse cenário, o recurso computacional mais adequado para acelerar esse tipo de carga é:",
+  alts:{A:"GPU, por favorecer operações paralelas sobre grandes conjuntos de dados",B:"impressora de rede, por permitir saída distribuída de relatórios em lote",C:"SSD externo, por substituir completamente o processamento matemático",D:"roteador sem fio, por aumentar o número de operações por núcleo da CPU"},
+  correta:"A",
+  resolucao:"Muitas operações semelhantes + grandes matrizes + processamento massivo em paralelo + operações vetoriais = GPUs, que são altamente eficientes exatamente nesse tipo de carga.",
+  erros:{B:"Impressora não acelera cálculo científico.",C:"Armazenamento mais rápido não substitui o processamento numérico.",D:"Roteador sem fio não aumenta a capacidade de cálculo matemático."},
+  bloom:"Aplicar"},
+
+  {id:24,set:3,aula:"Tópicos Avançados — Aula 4: Tolerância a Falhas",
+  textoBase:"Uma plataforma de pagamentos precisa continuar operando mesmo quando um servidor falha inesperadamente. Para isso, a equipe implementou duas instâncias do mesmo serviço em nós diferentes. Quando a instância principal para de responder, a secundária assume o atendimento. O objetivo é evitar interrupção percebida pelo cliente durante transações em andamento.",
+  enunciado:"A estratégia descrita no caso é um exemplo de:",
+  alts:{A:"redundância, usada para aumentar a tolerância a falhas do sistema",B:"serialização, usada para impedir que dois servidores existam ao mesmo tempo",C:"fragmentação, usada para dividir o serviço em arquivos menores no disco",D:"exclusão mútua, usada para impedir troca de mensagens entre réplicas"},
+  correta:"A",
+  resolucao:"Duas instâncias do mesmo serviço em nós diferentes, com a secundária assumindo quando a principal falha = uso clássico de redundância para garantir continuidade e tolerância a falhas.",
+  erros:{B:"Serialização não é o conceito envolvido no uso de réplicas para continuidade.",C:"Fragmentação é outro tema, ligado a armazenamento ou organização de memória.",D:"Exclusão mútua trata de acesso concorrente a recursos, não de failover entre instâncias."},
+  bloom:"Analisar"}
+];
+
+// ======= STATE =======
+const STREAK_TO_MASTER = 2;
+let queue = [];
+let mastered = new Set();
+let streaks = {};
+let attempts = 0;
+let correctCount = 0;
+let answered = false;
+let selectedAlt = null;
+let tbOpen = true;
+
+function saveState() {
+  try {
+    localStorage.setItem('b2_queue', JSON.stringify(queue));
+    localStorage.setItem('b2_mastered', JSON.stringify([...mastered]));
+    localStorage.setItem('b2_streaks', JSON.stringify(streaks));
+    localStorage.setItem('b2_attempts', attempts);
+    localStorage.setItem('b2_correct', correctCount);
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const q = localStorage.getItem('b2_queue');
+    const m = localStorage.getItem('b2_mastered');
+    const s = localStorage.getItem('b2_streaks');
+    if (q && m && s) {
+      queue = JSON.parse(q);
+      mastered = new Set(JSON.parse(m));
+      streaks = JSON.parse(s);
+      attempts = parseInt(localStorage.getItem('b2_attempts') || '0');
+      correctCount = parseInt(localStorage.getItem('b2_correct') || '0');
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function resetGame() {
+  queue = questoes.map((_, i) => i);
+  mastered = new Set();
+  streaks = {};
+  attempts = 0;
+  correctCount = 0;
+  answered = false;
+  selectedAlt = null;
+  tbOpen = true;
+  saveState();
+  document.getElementById('screenVictory').style.display = 'none';
+  document.getElementById('screenQuiz').style.display = '';
+  render();
+}
+
+function init() {
+  const loaded = loadState();
+  if (!loaded || queue.length === 0 && mastered.size < questoes.length) {
+    resetGame();
+    return;
+  }
+  if (queue.length === 0 && mastered.size === questoes.length) {
+    showVictory();
+    return;
+  }
+  render();
+}
+
+// ======= RENDER =======
+function render() {
+  renderHeader();
+  renderQueueViz();
+  if (queue.length === 0) {
+    showVictory();
+    return;
+  }
+  renderQuestion();
+}
+
+function renderHeader() {
+  const total = questoes.length;
+  const m = mastered.size;
+  const q = queue.length;
+  document.getElementById('statMastered').textContent = m + ' dominada' + (m !== 1 ? 's' : '');
+  document.getElementById('statQueue').textContent = q + ' na fila';
+  document.getElementById('statAttempts').textContent = attempts + ' tentativa' + (attempts !== 1 ? 's' : '');
+  const pct = (m / total) * 100;
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+function renderQueueViz() {
+  const viz = document.getElementById('queueViz');
+  // show all 24 dots
+  let html = '';
+  for (let i = 0; i < questoes.length; i++) {
+    const q = questoes[i];
+    if (mastered.has(q.id)) {
+      html += `<div class="qv-dot mastered" title="Q${q.id} dominada"></div>`;
+    } else {
+      const qpos = queue.indexOf(i);
+      const isCurrent = qpos === 0;
+      const str = streaks[q.id] || 0;
+      let cls = isCurrent ? 'current' : (str >= 1 ? 's1' : '');
+      html += `<div class="qv-dot ${cls}" title="Q${q.id} (streak ${str})"></div>`;
+    }
+  }
+  viz.innerHTML = html;
+}
+
+function renderQuestion() {
+  answered = false;
+  selectedAlt = null;
+  const qIdx = queue[0];
+  const q = questoes[qIdx];
+  const str = streaks[q.id] || 0;
+
+  // streak dots
+  let sdots = '';
+  for (let i = 0; i < STREAK_TO_MASTER; i++) {
+    sdots += `<div class="sdot ${i < str ? 'filled' : ''}"></div>`;
+  }
+
+  // alternativas
+  let altsHtml = '';
+  for (const [letter, text] of Object.entries(q.alts)) {
+    altsHtml += `
+      <button class="alt-btn" id="alt-${letter}" onclick="handleAnswer('${letter}')">
+        <span class="ltr">${letter}</span>
+        <span>${text}</span>
+      </button>`;
+  }
+
+  const posInQueue = queue.length;
+  const remaining = questoes.length - mastered.size;
+
+  const html = `
+    <div class="card" id="mainCard">
+      <div class="card-header">
+        <span class="card-num">Q${q.id} · SET ${q.set}</span>
+        <span class="card-aula">${q.aula}</span>
+        <span style="font-size:9px;color:var(--text-dim);margin-right:8px">${remaining} restantes</span>
+        <div class="streak-dots">${sdots}</div>
+      </div>
+
+      <div class="tb-wrap">
+        <div class="tb-toggle" onclick="toggleTb()">
+          <span class="tb-arrow" id="tbArrow">▼</span>
+          TEXTO-BASE
+        </div>
+        <div class="tb-body" id="tbBody">${q.textoBase}</div>
+      </div>
+
+      <div class="enunc-wrap">
+        <div class="enunc-label">Enunciado</div>
+        <div class="enunc-text">${q.enunciado}</div>
+      </div>
+
+      <div class="alts-wrap" id="altsWrap">
+        ${altsHtml}
+      </div>
+
+      <div id="resultPanel"></div>
+    </div>`;
+
+  document.getElementById('screenQuiz').innerHTML = html;
+
+  // restore tb state
+  if (!tbOpen) {
+    document.getElementById('tbBody').classList.add('hidden');
+    document.getElementById('tbArrow').classList.add('closed');
+  }
+}
+
+function toggleTb() {
+  tbOpen = !tbOpen;
+  document.getElementById('tbBody').classList.toggle('hidden', !tbOpen);
+  document.getElementById('tbArrow').classList.toggle('closed', !tbOpen);
+}
+
+function handleAnswer(alt) {
+  if (answered) return;
+  answered = true;
+  selectedAlt = alt;
+  attempts++;
+  const qIdx = queue[0];
+  const q = questoes[qIdx];
+  const correct = alt === q.correta;
+  if (correct) correctCount++;
+
+  // disable all buttons
+  document.querySelectorAll('.alt-btn').forEach(btn => btn.disabled = true);
+
+  // style buttons
+  for (const letter of Object.keys(q.alts)) {
+    const btn = document.getElementById('alt-' + letter);
+    if (letter === q.correta) {
+      btn.classList.add('correct');
+      btn.querySelector('.ltr').style.color = 'var(--green)';
+    } else if (letter === alt && !correct) {
+      btn.classList.add('wrong');
+    } else {
+      btn.classList.add('other-dim');
+    }
+  }
+
+  // build result panel
+  const isCorrect = correct;
+  const nextLabel = isCorrect
+    ? (((streaks[q.id] || 0) + 1) >= STREAK_TO_MASTER ? 'Questão dominada! Próxima →' : 'Acertei! Próxima →')
+    : 'Entendi. Próxima →';
+
+  const wrongHtml = Object.entries(q.erros).map(([l, t]) =>
+    `<div class="err-item"><strong>${l})</strong> ${t}</div>`
+  ).join('');
+
+  const panel = document.getElementById('resultPanel');
+  panel.innerHTML = `
+    <div class="result-panel result-${isCorrect ? 'correct' : 'wrong'}">
+      <div class="result-banner">
+        <div class="result-icon">${isCorrect ? 'CORRETO' : 'ERRADO'}</div>
+        <div class="result-sub">${isCorrect
+          ? ((streaks[q.id]||0)+1 >= STREAK_TO_MASTER ? 'Vai para dominadas!' : `Acerto ${(streaks[q.id]||0)+1}/${STREAK_TO_MASTER} — vai pro final da fila`)
+          : 'Volta pro início da fila'
+        }</div>
+      </div>
+      <div class="res-section">
+        <div class="res-label cyan">Por que está correta</div>
+        <div class="res-body">${q.resolucao}</div>
+      </div>
+      <div class="res-section">
+        <div class="res-label red">Por que as demais estão erradas</div>
+        ${wrongHtml}
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px">
+        Bloom: ${q.bloom}
+      </div>
+      <button class="next-btn" onclick="next()">${nextLabel}</button>
+    </div>`;
+
+  saveState();
+  renderHeader();
+}
+
+function next() {
+  const qIdx = queue[0];
+  const q = questoes[qIdx];
+  const correct = selectedAlt === q.correta;
+
+  queue.shift();
+
+  if (correct) {
+    streaks[q.id] = (streaks[q.id] || 0) + 1;
+    if (streaks[q.id] >= STREAK_TO_MASTER) {
+      mastered.add(q.id);
+      // graduated — don't re-add
+    } else {
+      // goes to end
+      queue.push(qIdx);
+    }
+  } else {
+    streaks[q.id] = 0;
+    // insert near front (position 1, see it soon)
+    const pos = Math.min(1, queue.length);
+    queue.splice(pos, 0, qIdx);
+  }
+
+  saveState();
+
+  if (queue.length === 0) {
+    showVictory();
+    return;
+  }
+
+  answered = false;
+  selectedAlt = null;
+  render();
+}
+
+function showVictory() {
+  document.getElementById('screenQuiz').style.display = 'none';
+  const acc = attempts > 0 ? Math.round((correctCount / attempts) * 100) : 0;
+  document.getElementById('vTotal').textContent = attempts;
+  document.getElementById('vCorrect').textContent = correctCount;
+  document.getElementById('vAcc').textContent = acc + '%';
+  const v = document.getElementById('screenVictory');
+  v.style.display = 'flex';
+  renderHeader();
+  renderQueueViz();
+  // confetti-like stars
+  spawnStars();
+}
+
+function spawnStars() {
+  const colors = ['#00ff88','#00d4ff','#ffd000','#cc44ff'];
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.style.cssText = `
+        position:fixed; pointer-events:none; z-index:300;
+        left:${Math.random()*100}vw; top:-20px;
+        font-size:${14+Math.random()*20}px;
+        color:${colors[Math.floor(Math.random()*colors.length)]};
+        animation: fall ${1.5+Math.random()*2}s linear forwards;
+      `;
+      el.textContent = ['★','◆','▲','●','◉'][Math.floor(Math.random()*5)];
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }, i * 100);
+  }
+}
+
+// inject fall animation
+const style = document.createElement('style');
+style.textContent = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }`;
+document.head.appendChild(style);
+
+// keyboard: Enter = next if answered
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && answered) next();
+  if (!answered && ['a','b','c','d'].includes(e.key.toLowerCase())) {
+    handleAnswer(e.key.toUpperCase());
+  }
+});
+
+init();
+</script>
 </body>
 </html>
