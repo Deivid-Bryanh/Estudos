@@ -381,6 +381,49 @@ Qual é a complexidade?
     </div>
 
 </div>
+<script>
+
+const allAnswers = document.querySelectorAll(".answer");
+
+allAnswers.forEach(answer => {
+
+    answer.addEventListener("click", () => {
+
+        const answersContainer = answer.parentElement;
+
+        if (answersContainer.classList.contains("answered")) {
+            return;
+        }
+
+        answersContainer.classList.add("answered");
+
+        const isCorrect = answer.dataset.correct === "true";
+
+        if (isCorrect) {
+
+            answer.classList.add("correct");
+
+        } else {
+
+            answer.classList.add("wrong");
+
+            const correctAnswer =
+                answersContainer.querySelector('[data-correct="true"]');
+
+            correctAnswer.classList.add("correct");
+        }
+
+        const all = answersContainer.querySelectorAll(".answer");
+
+        all.forEach(item => {
+            item.classList.add("disabled");
+        });
+
+    });
+
+});
+
+</script>
 
 </body>
 </html>
