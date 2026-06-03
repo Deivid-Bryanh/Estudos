@@ -1,16 +1,15 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Nada Aqui</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Provas - Análise de Computabilidade e Complexidade de Algoritmos</title>
 <link rel="stylesheet" href="style.css">
 
-</head>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+</head>
 <body>
 
 <!-- SIDEBAR -->
@@ -18,7 +17,7 @@
 <div class="sidebar">
 
     <div class="logo">
-        📘 Estudos
+        📘 Provas
     </div>
 
     <h2>Provas</h2>
@@ -37,17 +36,7 @@
 
 <!-- MAIN -->
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado - Complexidade de Algoritmos</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="container">
+<div class="main">
 
     <h1>Simulado - Complexidade de Algoritmos</h1>
 
@@ -381,6 +370,10 @@ Qual é a complexidade?
     </div>
 
 </div>
+
+
+</div>
+
 <script>
 
 const allAnswers = document.querySelectorAll(".answer");
@@ -391,7 +384,8 @@ allAnswers.forEach(answer => {
 
         const answersContainer = answer.parentElement;
 
-        if (answersContainer.classList.contains("answered")) {
+        // impedir múltiplos cliques
+        if(answersContainer.classList.contains("answered")){
             return;
         }
 
@@ -399,11 +393,11 @@ allAnswers.forEach(answer => {
 
         const isCorrect = answer.dataset.correct === "true";
 
-        if (isCorrect) {
+        if(isCorrect){
 
             answer.classList.add("correct");
 
-        } else {
+        }else{
 
             answer.classList.add("wrong");
 
@@ -413,6 +407,7 @@ allAnswers.forEach(answer => {
             correctAnswer.classList.add("correct");
         }
 
+        // desabilitar todas
         const all = answersContainer.querySelectorAll(".answer");
 
         all.forEach(item => {
@@ -427,6 +422,4 @@ allAnswers.forEach(answer => {
 
 </body>
 </html>
-
-</body>
-</html>
+```
