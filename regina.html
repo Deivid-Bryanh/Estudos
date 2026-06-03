@@ -37,19 +37,353 @@
 
 <!-- MAIN -->
 
-<div class="main">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Complexidade de Algoritmos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <div class="header">
+<div class="container">
 
-        <h1>🚧 Nada aqui ainda 🚧</h1>
+    <h1>Simulado - Complexidade de Algoritmos</h1>
 
-        <p>
-            Essa prova ainda não foi adicionada.
-        </p>
+    <!-- QUESTÃO 1 -->
+    <div class="question-card">
+        <div class="question-title">Questão 1</div>
+        <div class="question-text">
+            Qual dos itens abaixo representa uma complexidade constante?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="true">A) O(1)</div>
+            <div class="answer" data-correct="false">B) O(log n)</div>
+            <div class="answer" data-correct="false">C) O(n)</div>
+            <div class="answer" data-correct="false">D) O(n²)</div>
+        </div>
+    </div>
 
+    <!-- QUESTÃO 2 -->
+    <div class="question-card">
+        <div class="question-title">Questão 2</div>
+        <div class="question-text">
+            Em qual complexidade o problema é reduzido pela metade a cada iteração?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(log n)</div>
+            <div class="answer" data-correct="false">C) O(n²)</div>
+            <div class="answer" data-correct="false">D) O(2ⁿ)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 3 -->
+    <div class="question-card">
+        <div class="question-title">Questão 3</div>
+        <div class="question-text">
+            Qual complexidade está associada a percorrer todos os elementos de um vetor uma única vez?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(log n)</div>
+            <div class="answer" data-correct="true">B) O(n)</div>
+            <div class="answer" data-correct="false">C) O(n²)</div>
+            <div class="answer" data-correct="false">D) O(1)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 4 -->
+    <div class="question-card">
+        <div class="question-title">Questão 4</div>
+        <div class="question-text">
+            Qual complexidade é típica de algoritmos eficientes de ordenação como Merge Sort?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n²)</div>
+            <div class="answer" data-correct="true">B) O(n log n)</div>
+            <div class="answer" data-correct="false">C) O(n³)</div>
+            <div class="answer" data-correct="false">D) O(log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 5 -->
+    <div class="question-card">
+        <div class="question-title">Questão 5</div>
+        <div class="question-text">
+            Dois laços aninhados geralmente produzem qual complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(n²)</div>
+            <div class="answer" data-correct="false">C) O(log n)</div>
+            <div class="answer" data-correct="false">D) O(1)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 6 -->
+    <div class="question-card">
+        <div class="question-title">Questão 6</div>
+        <div class="question-text">
+            Três laços aninhados normalmente resultam em qual complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n²)</div>
+            <div class="answer" data-correct="true">B) O(n³)</div>
+            <div class="answer" data-correct="false">C) O(n)</div>
+            <div class="answer" data-correct="false">D) O(log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 7 -->
+    <div class="question-card">
+        <div class="question-title">Questão 7</div>
+        <div class="question-text">
+            Uma recursão em que cada chamada gera duas novas chamadas costuma apresentar qual complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n²)</div>
+            <div class="answer" data-correct="false">B) O(n)</div>
+            <div class="answer" data-correct="true">C) O(2ⁿ)</div>
+            <div class="answer" data-correct="false">D) O(log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 8 -->
+    <div class="question-card">
+        <div class="question-title">Questão 8</div>
+        <div class="question-text">
+            Algoritmos que geram todas as permutações possíveis possuem complexidade:
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n²)</div>
+            <div class="answer" data-correct="false">B) O(2ⁿ)</div>
+            <div class="answer" data-correct="true">C) O(n!)</div>
+            <div class="answer" data-correct="false">D) O(n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 9 -->
+    <div class="question-card">
+        <div class="question-title">Questão 9</div>
+        <div class="question-text">
+<pre>
+for(i=0;i&lt;n;i++)
+{
+    printf("%d",i);
+}
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(1)</div>
+            <div class="answer" data-correct="false">B) O(log n)</div>
+            <div class="answer" data-correct="true">C) O(n)</div>
+            <div class="answer" data-correct="false">D) O(n²)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 10 -->
+    <div class="question-card">
+        <div class="question-title">Questão 10</div>
+        <div class="question-text">
+<pre>
+if(x&gt;0)
+    printf("Positivo");
+else
+    printf("Negativo");
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="true">A) O(1)</div>
+            <div class="answer" data-correct="false">B) O(log n)</div>
+            <div class="answer" data-correct="false">C) O(n)</div>
+            <div class="answer" data-correct="false">D) O(n²)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 11 -->
+    <div class="question-card">
+        <div class="question-title">Questão 11</div>
+        <div class="question-text">
+<pre>
+for(i=0;i&lt;n;i++)
+{
+    for(j=0;j&lt;n;j++)
+    {
+        printf("*");
+    }
+}
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(n²)</div>
+            <div class="answer" data-correct="false">C) O(log n)</div>
+            <div class="answer" data-correct="false">D) O(n³)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 12 -->
+    <div class="question-card">
+        <div class="question-title">Questão 12</div>
+        <div class="question-text">
+<pre>
+i=n;
+
+while(i&gt;1)
+{
+    i=i/2;
+}
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(log n)</div>
+            <div class="answer" data-correct="false">C) O(n²)</div>
+            <div class="answer" data-correct="false">D) O(1)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 13 -->
+    <div class="question-card">
+        <div class="question-title">Questão 13</div>
+        <div class="question-text">
+<pre>
+void teste(int n)
+{
+    if(n==0) return;
+
+    teste(n-1);
+    teste(n-1);
+}
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="false">B) O(log n)</div>
+            <div class="answer" data-correct="true">C) O(2ⁿ)</div>
+            <div class="answer" data-correct="false">D) O(n²)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 14 -->
+    <div class="question-card">
+        <div class="question-title">Questão 14</div>
+        <div class="question-text">
+<pre>
+for(i=0;i&lt;n;i++)
+{
+    j=n;
+
+    while(j&gt;1)
+    {
+        j=j/2;
+    }
+}
+</pre>
+Qual é a complexidade?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(n log n)</div>
+            <div class="answer" data-correct="false">C) O(n²)</div>
+            <div class="answer" data-correct="false">D) O(log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 15 -->
+    <div class="question-card">
+        <div class="question-title">Questão 15</div>
+        <div class="question-text">
+            Vetores dinâmicos que dobram de tamanho quando ficam cheios apresentam qual custo amortizado médio por inserção?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="true">A) Θ(1)</div>
+            <div class="answer" data-correct="false">B) Θ(log n)</div>
+            <div class="answer" data-correct="false">C) Θ(n)</div>
+            <div class="answer" data-correct="false">D) Θ(n²)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 16 -->
+    <div class="question-card">
+        <div class="question-title">Questão 16</div>
+        <div class="question-text">
+            Em uma sequência de n inserções em um vetor dinâmico que dobra de tamanho, o custo total é:
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="true">A) Θ(n)</div>
+            <div class="answer" data-correct="false">B) Θ(log n)</div>
+            <div class="answer" data-correct="false">C) Θ(n²)</div>
+            <div class="answer" data-correct="false">D) Θ(n log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 17 -->
+    <div class="question-card">
+        <div class="question-title">Questão 17</div>
+        <div class="question-text">
+            Em qual alternativa ocorre um Memory Leak?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) malloc seguido de free</div>
+            <div class="answer" data-correct="false">B) Declaração de ponteiro sem malloc</div>
+            <div class="answer" data-correct="true">C) Retorno da função antes de executar free()</div>
+            <div class="answer" data-correct="false">D) malloc seguido de free no main()</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 18 -->
+    <div class="question-card">
+        <div class="question-title">Questão 18</div>
+        <div class="question-text">
+            Uma busca sequencial possui complexidade:
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(1)</div>
+            <div class="answer" data-correct="false">B) O(log n)</div>
+            <div class="answer" data-correct="true">C) O(n)</div>
+            <div class="answer" data-correct="false">D) O(n log n)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 19 -->
+    <div class="question-card">
+        <div class="question-title">Questão 19</div>
+        <div class="question-text">
+            Uma busca binária possui complexidade:
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="false">A) O(n)</div>
+            <div class="answer" data-correct="true">B) O(log n)</div>
+            <div class="answer" data-correct="false">C) O(n²)</div>
+            <div class="answer" data-correct="false">D) O(1)</div>
+        </div>
+    </div>
+
+    <!-- QUESTÃO 20 -->
+    <div class="question-card">
+        <div class="question-title">Questão 20</div>
+        <div class="question-text">
+            Qual é a ordem correta das complexidades da melhor para a pior?
+        </div>
+        <div class="answers">
+            <div class="answer" data-correct="true">A) O(1), O(log n), O(n), O(n log n), O(n²), O(n³), O(2ⁿ), O(n!)</div>
+            <div class="answer" data-correct="false">B) O(n), O(1), O(log n), O(n²), O(n³), O(2ⁿ), O(n!)</div>
+            <div class="answer" data-correct="false">C) O(log n), O(1), O(n), O(n²), O(n log n), O(n³)</div>
+            <div class="answer" data-correct="false">D) O(1), O(n), O(log n), O(n²), O(2ⁿ), O(n!)</div>
+        </div>
     </div>
 
 </div>
+
+</body>
+</html>
 
 </body>
 </html>
