@@ -368,7 +368,162 @@ Qual é a complexidade?
             <div class="answer" data-correct="false">D) O(1), O(n), O(log n), O(n²), O(2ⁿ), O(n!)</div>
         </div>
     </div>
+<!-- QUESTÃO 21 -->
+<div class="question-card">
+    <div class="question-title">Questão 21</div>
+    <div class="question-text">
+        No contexto do Teorema Mestre, se tivermos uma relação de recorrência onde
+        f(n)=Θ(n<sup>c<sub>crit</sub></sup> log<sup>k</sup>n) para k ≥ 0, qual é a complexidade final T(n)?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) T(n)=Θ(n<sup>c<sub>crit</sub></sup> log<sup>k</sup>n)</div>
+        <div class="answer" data-correct="true">B) T(n)=Θ(n<sup>c<sub>crit</sub></sup> log<sup>k+1</sup>n)</div>
+        <div class="answer" data-correct="false">C) T(n)=Θ(f(n))</div>
+        <div class="answer" data-correct="false">D) T(n)=Θ(n<sup>c<sub>crit</sub></sup>)</div>
+    </div>
+</div>
 
+<!-- QUESTÃO 22 -->
+<div class="question-card">
+    <div class="question-title">Questão 22</div>
+    <div class="question-text">
+<pre>
+for(i=0; i&lt;n; i++)
+{
+    j=n;
+    while(j&gt;1)
+        j=j/2;
+}
+</pre>
+        Qual é a complexidade assintótica do algoritmo?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) O(n²)</div>
+        <div class="answer" data-correct="false">B) O(n)</div>
+        <div class="answer" data-correct="false">C) O(log n)</div>
+        <div class="answer" data-correct="true">D) O(n log n)</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 23 -->
+<div class="question-card">
+    <div class="question-title">Questão 23</div>
+    <div class="question-text">
+        De acordo com a Tese de Church-Turing, qual afirmação sobre Máquinas de Turing é verdadeira?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) Existem problemas que redes neurais resolvem e Máquinas de Turing não.</div>
+        <div class="answer" data-correct="true">B) Qualquer função computável por um algoritmo pode ser calculada por uma Máquina de Turing.</div>
+        <div class="answer" data-correct="false">C) Máquinas de Turing com múltiplas fitas são estritamente mais poderosas.</div>
+        <div class="answer" data-correct="false">D) Máquinas de Turing Universais resolvem problemas indecidíveis.</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 24 -->
+<div class="question-card">
+    <div class="question-title">Questão 24</div>
+    <div class="question-text">
+        No desenvolvimento de sistemas embarcados, por que uma Máquina de Mealy pode ser preferível a uma Máquina de Moore?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) Porque sempre possui menos transições.</div>
+        <div class="answer" data-correct="true">B) Porque a saída pode reagir imediatamente à entrada no mesmo estado.</div>
+        <div class="answer" data-correct="false">C) Porque Moore é inerentemente não determinística.</div>
+        <div class="answer" data-correct="false">D) Porque Mealy possui memória ilimitada.</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 25 -->
+<div class="question-card">
+    <div class="question-title">Questão 25</div>
+    <div class="question-text">
+        Quais são as restrições obrigatórias para as constantes a e b na aplicação do Teorema Mestre?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) a &lt; b</div>
+        <div class="answer" data-correct="false">B) a deve ser par e b potência de 2</div>
+        <div class="answer" data-correct="true">C) a ≥ 1 e b &gt; 1</div>
+        <div class="answer" data-correct="false">D) a &gt; 0 e b ≥ 1</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 26 -->
+<div class="question-card">
+    <div class="question-title">Questão 26</div>
+    <div class="question-text">
+<pre>
+void f()
+{
+    char *p = malloc(10);
+    p = malloc(10);
+    free(p);
+}
+</pre>
+        Qual é a causa provável do memory leak?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="true">A) A reatribuição do ponteiro perde a referência da primeira alocação sem liberar a memória.</div>
+        <div class="answer" data-correct="false">B) O sistema operacional já havia liberado a memória.</div>
+        <div class="answer" data-correct="false">C) free() não pode ser usado com ponteiros char.</div>
+        <div class="answer" data-correct="false">D) A memória é liberada automaticamente ao sair da função.</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 27 -->
+<div class="question-card">
+    <div class="question-title">Questão 27</div>
+    <div class="question-text">
+        Ao realizar n inserções em um vetor dinâmico que dobra de tamanho quando cheio, qual é o tempo médio por inserção e o tempo total?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) Médio Θ(1) e Total Θ(n²)</div>
+        <div class="answer" data-correct="false">B) Médio Θ(log n) e Total Θ(n log n)</div>
+        <div class="answer" data-correct="true">C) Médio Θ(1) e Total Θ(n)</div>
+        <div class="answer" data-correct="false">D) Médio Θ(n) e Total Θ(n²)</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 28 -->
+<div class="question-card">
+    <div class="question-title">Questão 28</div>
+    <div class="question-text">
+        Por que a condição de regularidade (af(n/b) ≤ cf(n)) é fundamental para o Caso 3 do Teorema Mestre?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="false">A) Garante profundidade constante da árvore.</div>
+        <div class="answer" data-correct="true">B) Garante que o trabalho total seja dominado pelo custo da raiz.</div>
+        <div class="answer" data-correct="false">C) Impede crescimento exponencial de subproblemas.</div>
+        <div class="answer" data-correct="false">D) Converte funções logarítmicas em polinomiais.</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 29 -->
+<div class="question-card">
+    <div class="question-title">Questão 29</div>
+    <div class="question-text">
+        Um algoritmo guloso para o problema do troco mínimo sempre encontra a solução ótima global?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="true">A) Não, depende dos valores das moedas disponíveis.</div>
+        <div class="answer" data-correct="false">B) Sim, algoritmos gulosos sempre garantem ótimo global.</div>
+        <div class="answer" data-correct="false">C) Sim, desde que o valor seja par.</div>
+        <div class="answer" data-correct="false">D) Não, porque possuem complexidade exponencial.</div>
+    </div>
+</div>
+
+<!-- QUESTÃO 30 -->
+<div class="question-card">
+    <div class="question-title">Questão 30</div>
+    <div class="question-text">
+        Qual é a complexidade assintótica do algoritmo recursivo ingênuo para calcular o n-ésimo termo da sequência de Fibonacci?
+    </div>
+    <div class="answers">
+        <div class="answer" data-correct="true">A) O(2ⁿ)</div>
+        <div class="answer" data-correct="false">B) O(n)</div>
+        <div class="answer" data-correct="false">C) O(n²)</div>
+        <div class="answer" data-correct="false">D) O(log n)</div>
+    </div>
+</div>
 </div>
 
 
